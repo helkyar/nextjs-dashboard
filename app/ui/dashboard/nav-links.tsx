@@ -8,6 +8,7 @@ import {
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import clsx from 'clsx'
+import { UrlObject } from 'url'
 
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
@@ -31,7 +32,7 @@ export default function NavLinks() {
         return (
           <Link
             key={link.name}
-            href={link.href}
+            href={link.href as unknown as UrlObject}
             className={clsx(
               'flex h-[48px] grow md:grow-0 items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:fl]ex-none md:justify-start md:p-2 md:px-3',
               {
