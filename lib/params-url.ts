@@ -6,7 +6,7 @@ const delay = 300
 export function useParamsFromUrl(query: string | string[]) {
   const searchParams = useSearchParams()
   const pathname = usePathname()
-  const { replace, back } = useRouter()
+  const { replace } = useRouter()
 
   let currentParam = ''
   let currentParams: Record<string, string> = {}
