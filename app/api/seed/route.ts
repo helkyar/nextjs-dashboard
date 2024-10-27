@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt'
-import { db } from '@vercel/postgres'
+import { db } from '@/app/lib/db-connection'
 import { invoices, customers, revenue, users } from './placeholder-data'
 
 const client = await db.connect()
@@ -120,3 +120,9 @@ export async function GET() {
     return Response.json({ error }, { status: 500 })
   }
 }
+// export async function POST() {}
+// export async function PUT() {}
+// export async function PATCH() {}
+// export async function DELETE() {}
+// export async function HEAD() {}
+// export async function OPTIONS() {}

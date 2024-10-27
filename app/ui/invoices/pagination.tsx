@@ -4,51 +4,49 @@ import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
 import Link from 'next/link'
 import { generatePagination } from '@/app/lib/utils'
-import { UrlObject } from 'url'
+import { useParamsFromUrl } from '@/app/lib/params-url'
 
 export default function Pagination({ totalPages }: { totalPages: number }) {
-  // NOTE: Uncomment this code in Chapter 11
+  const { currentParam, createUrl } = useParamsFromUrl('page')
+  const currentPage = Number(currentParam) || 1
 
-  // const allPages = generatePagination(currentPage, totalPages);
-
+  const allPages = generatePagination(currentPage, totalPages)
   return (
     <>
-      {/*  NOTE: Uncomment this code in Chapter 11 */}
-
-      {/* <div className="inline-flex">
+      <div className="inline-flex">
         <PaginationArrow
           direction="left"
-          href={createPageURL(currentPage - 1)}
+          href={createUrl(currentPage - 1)}
           isDisabled={currentPage <= 1}
         />
 
         <div className="flex -space-x-px">
           {allPages.map((page, index) => {
-            let position: 'first' | 'last' | 'single' | 'middle' | undefined;
+            let position: 'first' | 'last' | 'single' | 'middle' | undefined
 
-            if (index === 0) position = 'first';
-            if (index === allPages.length - 1) position = 'last';
-            if (allPages.length === 1) position = 'single';
-            if (page === '...') position = 'middle';
+            if (index === 0) position = 'first'
+            if (index === allPages.length - 1) position = 'last'
+            if (allPages.length === 1) position = 'single'
+            if (page === '...') position = 'middle'
 
             return (
               <PaginationNumber
                 key={page}
-                href={createPageURL(page)}
+                href={createUrl(page)}
                 page={page}
                 position={position}
                 isActive={currentPage === page}
               />
-            );
+            )
           })}
         </div>
 
         <PaginationArrow
           direction="right"
-          href={createPageURL(currentPage + 1)}
+          href={createUrl(currentPage + 1)}
           isDisabled={currentPage >= totalPages}
         />
-      </div> */}
+      </div>
     </>
   )
 }
@@ -78,7 +76,7 @@ function PaginationNumber({
   return isActive || position === 'middle' ? (
     <div className={className}>{page}</div>
   ) : (
-    <Link href={href as unknown as UrlObject} className={className}>
+    <Link href={href} className={className}>
       {page}
     </Link>
   )
@@ -113,7 +111,7 @@ function PaginationArrow({
   return isDisabled ? (
     <div className={className}>{icon}</div>
   ) : (
-    <Link className={className} href={href as unknown as UrlObject}>
+    <Link className={className} href={href}>
       {icon}
     </Link>
   )
