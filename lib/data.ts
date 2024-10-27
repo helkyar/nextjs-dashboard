@@ -1,4 +1,4 @@
-import { sql } from '@/app/lib/db-connection'
+import { sql } from '@/lib/db-connection'
 import {
   CustomerField,
   CustomersTableType,

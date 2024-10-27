@@ -3,8 +3,8 @@
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
 import Link from 'next/link'
-import { generatePagination } from '@/app/lib/utils'
-import { useParamsFromUrl } from '@/app/lib/params-url'
+import { generatePagination } from '@/lib/utils'
+import { useParamsFromUrl } from '@/lib/params-url'
 
 export default function Pagination({ totalPages }: { totalPages: number }) {
   const { currentParam, createUrl } = useParamsFromUrl('page')
@@ -13,14 +13,14 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
   const allPages = generatePagination(currentPage, totalPages)
   return (
     <>
-      <div className="inline-flex">
+      <div className='inline-flex'>
         <PaginationArrow
-          direction="left"
+          direction='left'
           href={createUrl(currentPage - 1)}
           isDisabled={currentPage <= 1}
         />
 
-        <div className="flex -space-x-px">
+        <div className='flex -space-x-px'>
           {allPages.map((page, index) => {
             let position: 'first' | 'last' | 'single' | 'middle' | undefined
 
@@ -42,7 +42,7 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
         </div>
 
         <PaginationArrow
-          direction="right"
+          direction='right'
           href={createUrl(currentPage + 1)}
           isDisabled={currentPage >= totalPages}
         />
@@ -73,13 +73,11 @@ function PaginationNumber({
     }
   )
 
-  return isActive || position === 'middle' ? (
-    <div className={className}>{page}</div>
-  ) : (
-    <Link href={href} className={className}>
-      {page}
-    </Link>
-  )
+  return isActive || position === 'middle' ?
+      <div className={className}>{page}</div>
+    : <Link href={href} className={className}>
+        {page}
+      </Link>
 }
 
 function PaginationArrow({
@@ -102,17 +100,13 @@ function PaginationArrow({
   )
 
   const icon =
-    direction === 'left' ? (
-      <ArrowLeftIcon className="w-4" />
-    ) : (
-      <ArrowRightIcon className="w-4" />
-    )
+    direction === 'left' ?
+      <ArrowLeftIcon className='w-4' />
+    : <ArrowRightIcon className='w-4' />
 
-  return isDisabled ? (
-    <div className={className}>{icon}</div>
-  ) : (
-    <Link className={className} href={href}>
-      {icon}
-    </Link>
-  )
+  return isDisabled ?
+      <div className={className}>{icon}</div>
+    : <Link className={className} href={href}>
+        {icon}
+      </Link>
 }

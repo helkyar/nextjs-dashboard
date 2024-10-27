@@ -1,13 +1,12 @@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 
 const delay = 300
 
-export function useParamsFromUrl(query: string | string[] = 'query') {
+export function useParamsFromUrl(query: string | string[]) {
   const searchParams = useSearchParams()
   const pathname = usePathname()
-  const { replace } = useRouter()
+  const { replace, back } = useRouter()
 
   let currentParam = ''
   let currentParams: Record<string, string> = {}
