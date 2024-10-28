@@ -7,6 +7,7 @@ import { signIn } from '@/auth/auth'
 import { AuthError } from 'next-auth'
 import { redirect } from 'next/navigation'
 import { isRedirectError } from 'next/dist/client/components/redirect'
+import { session } from '@/middleware'
 
 // hydration error
 // const dateToDatabase = () => new Date().toISOString().split('T')[0]
@@ -22,6 +23,9 @@ export type State = {
 
 const CreateInvoice = FormSchema.omit({ id: true, date: true })
 export async function createInvoice(formData: FormData) {
+  if (!(await session())?.user) throw new Error('User not found')
+  // if (!(await session())?.user) redirect('/login')
+
   // const rawFormData = Object.fromEntries(formData.entries())
   const validatedFields = CreateInvoice.safeParse({
     customerId: formData.get('customerId'),
@@ -55,6 +59,7 @@ export async function createInvoice(formData: FormData) {
 
 const UpdateInvoice = FormSchema.omit({ id: true, date: true })
 export async function updateInvoice(formData: FormData, id?: string) {
+  if (!(await session())?.user) throw new Error('User not found')
   if (!id) return { message: 'Invoice not found' }
 
   const validatedFields = UpdateInvoice.safeParse({
@@ -90,6 +95,7 @@ export async function updateInvoice(formData: FormData, id?: string) {
 }
 
 export async function deleteInvoice(id: string) {
+  if (!(await session())?.user) throw new Error('User not found')
   try {
     await sql`
     DELETE FROM invoices

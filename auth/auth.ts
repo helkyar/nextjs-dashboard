@@ -54,25 +54,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
     }),
   ],
-  callbacks: {
-    async jwt({ token, account }) {
-      if (account) {
-        token.id = account.providerAccountId
-        token.accessToken = account.access_token
-      }
-      return token
-    },
-    async session({ session, token }) {
-      console.log('🚀 ~ session ~ session:', session)
-      console.log('🚀 ~ session ~ token:', token)
-      // session.user = token.id;
-      // session.user = token.accessToken;
-      return session
-    },
-    async redirect({ url, baseUrl }) {
-      return baseUrl + '/dashboard'
-    },
-  },
 })
 
 // // API use case

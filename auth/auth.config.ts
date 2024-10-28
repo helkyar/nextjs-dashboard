@@ -20,13 +20,11 @@ export const authConfig = {
       }
       return true
     },
-    async session({ session, token }) {
-      console.log('🚀 ~ session ~ session:', session)
-      console.log('🚀 ~ session ~ token:', token)
-      // session.user = token.id;
-      // session.user = token.accessToken;
-      return session
-    },
+    // async session({ session, token }) {
+    //   // session.user = token.id;
+    //   // session.user = token.accessToken;
+    //   return session
+    // },
   },
   providers: [
     google,

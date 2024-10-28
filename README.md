@@ -6,9 +6,10 @@ For more information, see the [course curriculum](https://nextjs.org/learn) on t
 
 ## Next steps
 
-- tests
+- hydrated errors
 - eslint
-- hook.js:608 A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up
+- sign out refreshes google auth
+- tests
 - Don't clean form data on error
 - order columns by click
 - email auth provider
@@ -17,5 +18,3 @@ For more information, see the [course curriculum](https://nextjs.org/learn) on t
 - Edit and Delete optimistic updates
 - Edit and Delete rollback on error
 - sign up form
-- sign out refreshes google auth
-- does server actions expose POST requests?
