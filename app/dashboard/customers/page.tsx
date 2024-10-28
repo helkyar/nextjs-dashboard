@@ -17,7 +17,6 @@ export const metadata: Metadata = {
 export default async function Page(props: PropTypes) {
   const searchParams = await props.searchParams
   const query = searchParams?.[searchQuery] || ''
-  const currentPage = Number(searchParams?.page) || 1
   const customers = await fetchFilteredCustomers(query)
 
   return <CustomersTable customers={customers} query={searchQuery} />
