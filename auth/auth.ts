@@ -54,6 +54,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
     }),
   ],
+  callbacks: {
+    async redirect({ url, baseUrl }) {
+      return baseUrl + '/dashboard'
+    },
+  },
 })
 
 // // API use case

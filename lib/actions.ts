@@ -121,11 +121,10 @@ export async function authenticate(formData: FormData) {
   }
 
   try {
-    await signIn('credentials', formData, { redirectTo: '/dashboard' })
+    await signIn('credentials', formData)
 
     return { success: 'Logged in successfully.' }
   } catch (error) {
-    if (isRedirectError(error)) redirect('/dashboard')
     if (error instanceof AuthError) {
       switch (error.type) {
         case 'CredentialsSignin':
@@ -134,6 +133,7 @@ export async function authenticate(formData: FormData) {
           return { message: 'Something went wrong.' }
       }
     }
+    if (isRedirectError(error)) throw error
     return { error: 'Data Base error. Something went wrong.' }
   }
 }
