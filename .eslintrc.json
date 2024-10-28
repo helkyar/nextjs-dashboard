@@ -1,13 +1,6 @@
 {
-  "extends": [
-    "next/core-web-vitals",
-    "next/typescript",
-    "eslint:recommended",
-    "plugin:@next/next/recommended"
-  ],
-  "plugins": ["prettier"],
+  "extends": ["next/core-web-vitals", "next/typescript", "prettier"],
   "rules": {
-    "prettier/prettier": ["error", { "endOfLine": "auto" }],
     "react/react-in-jsx-scope": "off"
   }
 }

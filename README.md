@@ -12,3 +12,7 @@ For more information, see the [course curriculum](https://nextjs.org/learn) on t
 - eslint
 - hook.js:608 A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up
 - protected routes
+- order columns by click
+- login form input handling & errors
+- [best practices] route protection
+- [best practices] authorization -> roles and shit
