@@ -6,13 +6,12 @@ For more information, see the [course curriculum](https://nextjs.org/learn) on t
 
 ## Next steps
 
-- add toast to server form components/actions without 'use client'
 - tests
-- disable button on isSubmitting
 - eslint
 - hook.js:608 A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up
-- protected routes
 - order columns by click
-- login form input handling & errors
-- [best practices] route protection
+- [best practices] route protection -> library
 - [best practices] authorization -> roles and shit
+- Edit and Delete optimistic updates
+- Edit and Delete rollback on error
+- Don't clean form data on error

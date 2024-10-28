@@ -1,4 +1,7 @@
 import type { NextAuthConfig } from 'next-auth'
+import github from 'next-auth/providers/github'
+import google from 'next-auth/providers/google'
+import resend from 'next-auth/providers/resend'
 
 export const authConfig = {
   pages: {
@@ -6,6 +9,9 @@ export const authConfig = {
   },
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
+      console.log('🚀 ~ authorized ~ request:', nextUrl)
+      console.log('🚀 ~ authorized ~ auth:', auth)
+
       const isLoggedIn = !!auth?.user
       const isOnDashboard = nextUrl.pathname.startsWith('/dashboard')
       if (isOnDashboard) {
@@ -17,5 +23,5 @@ export const authConfig = {
       return true
     },
   },
-  providers: [], // Add providers with an empty array for now
+  providers: [google, github, resend], // Add providers with an empty array for now
 } satisfies NextAuthConfig

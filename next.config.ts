@@ -6,6 +6,16 @@ const nextConfig: NextConfig = {
     // typedRoutes: true,
     // ppr: 'incremental',
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'cdn-teams-slug.flaticon.com',
+        port: '',
+        // pathname: '/account123/**',
+      },
+    ],
+  },
 }
 
 export default nextConfig

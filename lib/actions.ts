@@ -102,46 +102,42 @@ export async function deleteInvoice(id: string) {
   }
 }
 
-export async function authenticate(
-  prevState: string | undefined,
-  formData: FormData
-) {
-  // const validatedFields = LoginSchema.safeParse({
-  //   email: formData.get('email'),
-  //   password: formData.get('password'),
-  // })
-  // if (!validatedFields.success) {
-  //   return {
-  //     errors: validatedFields.error.flatten().fieldErrors,
-  //     message: 'Missing Fields. Fill them to login',
-  //   }
-  // }
+export async function authenticate(formData: FormData) {
+  const validatedFields = LoginSchema.safeParse({
+    email: formData.get('email'),
+    password: formData.get('password'),
+  })
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+    }
+  }
 
   try {
-    await signIn('credentials', formData)
-    // return { success: 'Logged in successfully.' }
+    const user = await signIn('credentials', formData)
+    console.log('🚀 ~ authenticate ~ user:', user)
+
+    return { success: 'Logged in successfully.' }
   } catch (error) {
+    console.log('🚀 ~ authenticate ~ error:', error)
     if (error instanceof AuthError) {
       switch (error.type) {
         case 'CredentialsSignin':
-          // return { errors: ['Invalid credentials.'] }
-          return 'Invalid credentials.'
+          return { message: 'Invalid credentials.' }
         default:
-          // return { errors: ['Something went wrong.'] }
-          return 'Something went wrong.'
+          return { message: 'Something went wrong.' }
       }
     }
-    throw error
-    // return { error: 'Database error: try again later' }
+
+    return { error: 'Database error: try again later' }
   }
-  redirect('/dashboard')
 }
 
 export async function googleLogin() {
-  await signIn('google')
+  await signIn('google', { callbackUrl: '/dashboard' })
 }
 export async function githubLogin() {
-  await signIn('github')
+  await signIn('github', { callbackUrl: '/dashboard' })
 }
 export async function emailLogin(formData: FormData) {
   await signIn('resend', formData)

@@ -1,11 +1,9 @@
 import NextAuth, { CredentialsSignin } from 'next-auth'
 import { authConfig } from './auth.config'
 import Credentials from 'next-auth/providers/credentials'
-import { schema } from '@/lib/schema-validation'
 import type { User } from '@/lib/definitions'
 import bcrypt from 'bcrypt'
 import { sql } from '@/lib/db-connection'
-import { redirect } from 'next/navigation'
 import { LoginSchema } from '@/lib/schemas'
 import GitHub from 'next-auth/providers/github'
 import Google from 'next-auth/providers/google'
@@ -40,13 +38,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       async authorize(credentials) {
         const parsedCredentials = LoginSchema.safeParse(credentials)
 
-        if (!parsedCredentials.success) {
-          throw new CustomErrorCredentials(
-            '',
-            parsedCredentials.error.flatten().fieldErrors,
-            'Missing Fields. Failed to Login.'
-          )
-        }
         if (parsedCredentials.success) {
           const { email, password } = parsedCredentials.data
           const user = await getUser(email)
@@ -54,7 +45,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
           const passwordsMatch = await bcrypt.compare(password, user.password)
           if (passwordsMatch) return user
-          // redirect('/dashboard')
         }
 
         return null
@@ -63,6 +53,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   ],
 })
 
+// // API use case
 // export const { signIn, signOut, auth } = NextAuth({
 //   providers: [
 //     Credentials({
@@ -78,3 +69,46 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 //     }),
 //   ],
 // })
+
+// // Provider config
+// import NextAuth, { AuthOptions, DefaultUser } from "next-auth"
+// import SpotifyProvider from "next-auth/providers/spotify"
+
+// export const authOptions: AuthOptions = {
+//   // Configure one or more authentication providers
+//   providers: [
+//     SpotifyProvider({
+//       clientId: process.env.SPOTIFY_CLIENT_ID!,
+//       clientSecret: process.env.SPOTIFY_CLIENT_SECRET!,
+//       authorization: {
+//         params: {
+//           scope: process.env.SPOTIFY_API_SCOPE!
+//         }
+//       }
+//     }),
+//   ],
+//   callbacks: {
+//     async jwt({token, account}) {
+//       if (account) {
+//         token.id = account.providerAccountId
+//         token.accessToken = account.access_token
+//       }
+//       return token
+//     },
+//     async session({session, token}) {
+//       // console.log('token', token);
+//       session.user.userId = token.id;
+//       session.user.accessToken = token.accessToken;
+//       return session
+//     },
+//     async redirect({url, baseUrl}) {
+//       console.log('url', url);
+//       console.log('baseUrl', baseUrl);
+
+//       return url.startsWith(baseUrl) ? url : baseUrl + '/protected/client';
+//     }
+//   }
+// }
+
+// const handler = NextAuth(authOptions);
+// export { handler as GET, handler as POST };

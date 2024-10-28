@@ -10,29 +10,34 @@ import { Button } from '@/ui/button'
 import { useActionState } from 'react'
 import { authenticate } from '@/lib/actions'
 import { toast } from '@/ui/toast'
-import { signIn } from '@/auth/auth'
 import GitHubLogin from '@/ui/login/github-login'
 import GoogleLogin from '@/ui/login/google-login'
+import InputError from '@/ui/input-error'
+import InputErrorMessage from '@/ui/input-error-form'
+import { redirect } from 'next/navigation'
 
 type LoginState = {
-  errors: {
+  errors?: {
     email?: string[]
     password?: string[]
   }
-  message: string | null
+  message?: string | null
 }
 
 export default function LoginForm() {
-  // const handleLogin = async (prevState: LoginState, formData: FormData) => {
-  //   const resp = await authenticate(formData)
-  //   if (resp.error) toast.error(resp.error)
-  //   if (resp.success) toast.success(resp.success)
-  //   return resp
-  // }
-  // const initialState: LoginState = { message: null, errors: {} }
+  const handleLogin = async (prevState: LoginState, formData: FormData) => {
+    const resp = await authenticate(formData)
+    if (resp.error) toast.error(resp.error)
+    if (resp.success) {
+      toast.success(resp.success)
+      redirect('/dashboard')
+    }
+    return resp
+  }
+  const initialState: LoginState = { message: null, errors: {} }
   const [errorMessage, formAction, isPending] = useActionState(
-    authenticate,
-    undefined
+    handleLogin,
+    initialState
   )
   console.log('🚀 ~ LoginForm ~ errorMessage:', errorMessage)
 
@@ -58,10 +63,15 @@ export default function LoginForm() {
                   type='email'
                   name='email'
                   placeholder='Enter your email address'
-                  required
+                  aria-describedby='email-error'
                 />
                 <AtSymbolIcon className='pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900' />
               </div>
+
+              <InputError
+                errors={errorMessage?.errors?.email}
+                id='email-error'
+              />
             </div>
             <div className='mt-4'>
               <label
@@ -77,28 +87,28 @@ export default function LoginForm() {
                   type='password'
                   name='password'
                   placeholder='Enter password'
-                  required
                   minLength={6}
+                  aria-describedby='password-error'
                 />
                 <KeyIcon className='pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900' />
-              </div>
+              </div>{' '}
+              <InputError
+                errors={errorMessage?.errors?.password}
+                id='password-error'
+              />
             </div>
           </div>
           <Button className='mt-4 w-full' aria-disabled={isPending}>
             Log in <ArrowRightIcon className='ml-auto h-5 w-5 text-gray-50' />
           </Button>
-          <div className='flex h-8 items-end space-x-1'>
-            {errorMessage && (
-              <>
-                <ExclamationCircleIcon className='h-5 w-5 text-red-500' />
-                <p className='text-sm text-red-500'>{errorMessage}</p>
-              </>
-            )}
-          </div>
+          <InputErrorMessage error={errorMessage?.message} id='message-error' />
+          <div className='flex h-8 items-end space-x-1'></div>
         </div>
       </form>
-      <GitHubLogin />
-      <GoogleLogin />
+      <div className='flex justify-between gap-3'>
+        <GitHubLogin />
+        <GoogleLogin />
+      </div>
     </>
   )
 }

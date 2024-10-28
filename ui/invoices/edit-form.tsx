@@ -17,15 +17,21 @@ export default function EditInvoiceForm({
   // const updateInvoiceWithId = updateInvoice.bind(null, invoice.id)
   const handleUpdateInvoice = async (prev: State, formData: FormData) => {
     const resp = await updateInvoice(formData, invoice?.id)
+
     if (resp.error) toast.error(resp.error)
     if (resp.success) {
       toast.success(resp.success)
       redirect('/dashboard/invoices')
     }
+
     return resp
   }
+
   const initialState: State = { message: null, errors: {} }
-  const [state, formAction] = useActionState(handleUpdateInvoice, initialState)
+  const [state, formAction, isSubmitting] = useActionState(
+    handleUpdateInvoice,
+    initialState
+  )
 
   return (
     <GeneralInvoiceForm
@@ -33,6 +39,7 @@ export default function EditInvoiceForm({
       state={state}
       action={formAction}
       customers={customers}
+      isSubmitting={isSubmitting}
     />
   )
 }
