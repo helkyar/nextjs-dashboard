@@ -3,7 +3,7 @@ import { authConfig } from '@/auth/auth.config'
 import { NextRequest, NextResponse } from 'next/server'
 
 // export default NextAuth(authConfig).auth
-const user = NextAuth(authConfig).auth
+export const session = NextAuth(authConfig).auth
 const protectedRoutes = ['/dashboard', '/dashboard/*']
 
 export const config = {
@@ -12,11 +12,10 @@ export const config = {
 }
 
 export default async function middleware(req: NextRequest) {
-  const session = await user()
-  console.log('🚀 ~ middleware ~ req:', req)
-  console.log('🚀 ~ middleware ~ session:', session)
+  const currentSession = await session()
+  console.log('🚀 ~ middleware ~ session:', currentSession)
   console.log('🚀 ~ middleware ~ req ~ pathname:', req.nextUrl.pathname)
-  if (!session?.user && protectedRoutes.includes(req.nextUrl.pathname)) {
+  if (!currentSession?.user && protectedRoutes.includes(req.nextUrl.pathname)) {
     const absoluteURL = new URL('/login', req.nextUrl.origin)
     return NextResponse.redirect(absoluteURL.toString())
   }

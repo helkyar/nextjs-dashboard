@@ -39,7 +39,6 @@ export default function LoginForm() {
     handleLogin,
     initialState
   )
-  console.log('🚀 ~ LoginForm ~ errorMessage:', errorMessage)
 
   return (
     <>

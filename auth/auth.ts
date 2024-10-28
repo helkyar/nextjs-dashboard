@@ -7,6 +7,7 @@ import { sql } from '@/lib/db-connection'
 import { LoginSchema } from '@/lib/schemas'
 import GitHub from 'next-auth/providers/github'
 import Google from 'next-auth/providers/google'
+import Resend from 'next-auth/providers/resend'
 type Errors = { email?: string[] | undefined; password?: string[] | undefined }
 
 class CustomErrorCredentials extends CredentialsSignin {
@@ -32,8 +33,12 @@ async function getUser(email: string): Promise<User | undefined> {
 export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
   providers: [
-    Google,
+    Google({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    }),
     GitHub,
+    // Resend,
     Credentials({
       async authorize(credentials) {
         const parsedCredentials = LoginSchema.safeParse(credentials)
@@ -41,9 +46,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         if (parsedCredentials.success) {
           const { email, password } = parsedCredentials.data
           const user = await getUser(email)
+          console.log('🚀 ~ authorize ~ user:', user)
           if (!user) return null
 
           const passwordsMatch = await bcrypt.compare(password, user.password)
+          console.log('🚀 ~ authorize ~ passwordsMatch:', passwordsMatch)
           if (passwordsMatch) return user
         }
 
@@ -51,6 +58,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
     }),
   ],
+  secret: process.env.SECRET,
 })
 
 // // API use case

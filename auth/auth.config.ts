@@ -23,5 +23,9 @@ export const authConfig = {
       return true
     },
   },
-  providers: [google, github, resend], // Add providers with an empty array for now
+  providers: [
+    google,
+    github,
+    // resend
+  ], // Add providers with an empty array for now
 } satisfies NextAuthConfig

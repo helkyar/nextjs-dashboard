@@ -6,6 +6,7 @@ import { revalidatePath } from 'next/cache'
 import { signIn } from '@/auth/auth'
 import { AuthError } from 'next-auth'
 import { redirect } from 'next/navigation'
+import { isRedirectError } from 'next/dist/client/components/redirect'
 
 // hydration error
 // const dateToDatabase = () => new Date().toISOString().split('T')[0]
@@ -114,12 +115,11 @@ export async function authenticate(formData: FormData) {
   }
 
   try {
-    const user = await signIn('credentials', formData)
-    console.log('🚀 ~ authenticate ~ user:', user)
+    await signIn('credentials', formData, { redirectTo: '/dashboard' })
 
     return { success: 'Logged in successfully.' }
   } catch (error) {
-    console.log('🚀 ~ authenticate ~ error:', error)
+    if (isRedirectError(error)) redirect('/dashboard')
     if (error instanceof AuthError) {
       switch (error.type) {
         case 'CredentialsSignin':
@@ -128,8 +128,7 @@ export async function authenticate(formData: FormData) {
           return { message: 'Something went wrong.' }
       }
     }
-
-    return { error: 'Database error: try again later' }
+    return { error: 'Data Base error. Something went wrong.' }
   }
 }
 
