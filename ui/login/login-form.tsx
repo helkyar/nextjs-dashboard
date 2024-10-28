@@ -59,7 +59,7 @@ export default function LoginForm() {
                 <input
                   className='peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500'
                   id='email'
-                  type='email'
+                  type='text'
                   name='email'
                   placeholder='Enter your email address'
                   aria-describedby='email-error'
@@ -86,7 +86,6 @@ export default function LoginForm() {
                   type='password'
                   name='password'
                   placeholder='Enter password'
-                  minLength={6}
                   aria-describedby='password-error'
                 />
                 <KeyIcon className='pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900' />
@@ -101,10 +100,13 @@ export default function LoginForm() {
             Log in <ArrowRightIcon className='ml-auto h-5 w-5 text-gray-50' />
           </Button>
           <InputErrorMessage error={errorMessage?.message} id='message-error' />
-          <div className='flex h-8 items-end space-x-1'></div>
+          {/* <div className='flex h-8 items-end space-x-1'></div> */}
         </div>
       </form>
-      <div className='flex justify-between gap-3'>
+      <div className='relative w-full text-center after:absolute after:w-[calc(100%_/_2_-_20px)] after:top-1/2 after:h-[1px] after:bg-black after:right-0 before:absolute before:w-[calc(100%_/_2_-_20px)] before:top-1/2 before:left-0 before:h-[1px] before:bg-black'>
+        or
+      </div>
+      <div className='flex flex-col gap-3'>
         <GitHubLogin />
         <GoogleLogin />
       </div>

@@ -5,7 +5,7 @@ import Image from 'next/image'
 export default function GoogleLogin() {
   return (
     <form action={googleLogin}>
-      <Button type='submit' className='flex gap-2 py-6'>
+      <Button type='submit' className='w-full justify-center flex gap-2 py-6'>
         <Image
           width={24}
           height={24}
@@ -13,7 +13,7 @@ export default function GoogleLogin() {
           alt='google icon'
           className='rounded-full'
         />
-        Signin with Google
+        Continue with Google
       </Button>
     </form>
   )

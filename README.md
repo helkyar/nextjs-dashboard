@@ -10,8 +10,11 @@ For more information, see the [course curriculum](https://nextjs.org/learn) on t
 - eslint
 - hook.js:608 A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up
 - order columns by click
+- email auth provider
 - [best practices] route protection -> library
 - [best practices] authorization -> roles and shit
 - Edit and Delete optimistic updates
 - Edit and Delete rollback on error
 - Don't clean form data on error
+- sign up form
+- sign out refreshes google auth

@@ -9,10 +9,8 @@ export const authConfig = {
   },
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
-      console.log('🚀 ~ authorized ~ request:', nextUrl)
-      console.log('🚀 ~ authorized ~ auth:', auth)
-
       const isLoggedIn = !!auth?.user
+      console.log('🚀 ~ authorized ~ isLoggedIn:', isLoggedIn)
       const isOnDashboard = nextUrl.pathname.startsWith('/dashboard')
       if (isOnDashboard) {
         if (isLoggedIn) return true
@@ -21,6 +19,13 @@ export const authConfig = {
         return Response.redirect(new URL('/dashboard', nextUrl))
       }
       return true
+    },
+    async session({ session, token }) {
+      console.log('🚀 ~ session ~ session:', session)
+      console.log('🚀 ~ session ~ token:', token)
+      // session.user = token.id;
+      // session.user = token.accessToken;
+      return session
     },
   },
   providers: [
