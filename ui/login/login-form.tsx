@@ -1,10 +1,6 @@
 'use client'
 import { lusitana } from '@/ui/fonts'
-import {
-  AtSymbolIcon,
-  KeyIcon,
-  ExclamationCircleIcon,
-} from '@heroicons/react/24/outline'
+import { AtSymbolIcon, KeyIcon } from '@heroicons/react/24/outline'
 import { ArrowRightIcon } from '@heroicons/react/20/solid'
 import { Button } from '@/ui/button'
 import { useActionState } from 'react'
@@ -102,7 +98,6 @@ export default function LoginForm() {
             </Button>
           </fieldset>
           <InputErrorMessage error={errorMessage?.message} id='message-error' />
-          {/* <div className='flex h-8 items-end space-x-1'></div> */}
         </div>
       </form>
       <div className='relative w-full text-center after:absolute after:w-[calc(100%_/_2_-_20px)] after:top-1/2 after:h-[1px] after:bg-black after:right-0 before:absolute before:w-[calc(100%_/_2_-_20px)] before:top-1/2 before:left-0 before:h-[1px] before:bg-black'>

@@ -4,10 +4,10 @@ import { FormSchema, LoginSchema } from '@/lib/schemas'
 import { sql } from '@/lib/db-connection'
 import { revalidatePath } from 'next/cache'
 import { signIn } from '@/auth/auth'
+import { isUserLogged } from '@/auth/logged-user'
 import { AuthError } from 'next-auth'
-import { redirect } from 'next/navigation'
 import { isRedirectError } from 'next/dist/client/components/redirect'
-import { session } from '@/middleware'
+import { validateFormData } from '@/lib/schema-validation'
 
 // hydration error
 // const dateToDatabase = () => new Date().toISOString().split('T')[0]
@@ -23,23 +23,13 @@ export type State = {
 
 const CreateInvoice = FormSchema.omit({ id: true, date: true })
 export async function createInvoice(formData: FormData) {
-  if (!(await session())?.user) throw new Error('User not found')
-  // if (!(await session())?.user) redirect('/login')
+  isUserLogged()
 
-  // const rawFormData = Object.fromEntries(formData.entries())
-  const validatedFields = CreateInvoice.safeParse({
-    customerId: formData.get('customerId'),
-    amount: formData.get('amount'),
-    status: formData.get('status'),
+  const validatedFields = validateFormData(CreateInvoice, formData, {
+    errorMessage: 'Missing Fields. Failed to Create Invoice.',
   })
 
-  if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Missing Fields. Failed to Create Invoice.',
-    }
-  }
-
+  if (validatedFields.error) return validatedFields.error
   const { customerId, amount, status } = validatedFields.data
   const amountInCents = amount * 100
   const date = new Date().toISOString().split('T')[0]
@@ -58,23 +48,14 @@ export async function createInvoice(formData: FormData) {
 }
 
 const UpdateInvoice = FormSchema.omit({ id: true, date: true })
-export async function updateInvoice(formData: FormData, id?: string) {
-  if (!(await session())?.user) throw new Error('User not found')
-  if (!id) return { message: 'Invoice not found' }
+export async function updateInvoice(formData: FormData, id: string) {
+  isUserLogged()
 
-  const validatedFields = UpdateInvoice.safeParse({
-    customerId: formData.get('customerId'),
-    amount: formData.get('amount'),
-    status: formData.get('status'),
+  const validatedFields = validateFormData(UpdateInvoice, formData, {
+    errorMessage: 'Missing Fields. Failed to Update Invoice.',
   })
 
-  if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Missing Fields. Failed to Update Invoice.',
-    }
-  }
-
+  if (validatedFields.error) return validatedFields.error
   const { customerId, amount, status } = validatedFields.data
   const amountInCents = amount * 100
   try {
@@ -95,7 +76,7 @@ export async function updateInvoice(formData: FormData, id?: string) {
 }
 
 export async function deleteInvoice(id: string) {
-  if (!(await session())?.user) throw new Error('User not found')
+  isUserLogged()
   try {
     await sql`
     DELETE FROM invoices
@@ -110,15 +91,8 @@ export async function deleteInvoice(id: string) {
 }
 
 export async function authenticate(formData: FormData) {
-  const validatedFields = LoginSchema.safeParse({
-    email: formData.get('email'),
-    password: formData.get('password'),
-  })
-  if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-    }
-  }
+  const validatedFields = validateFormData(LoginSchema, formData)
+  if (validatedFields.error) return validatedFields.error
 
   try {
     await signIn('credentials', formData)

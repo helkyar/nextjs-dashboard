@@ -1,6 +1,6 @@
 'use client'
 
-import { CustomerField, InvoiceForm, Customer } from '@/lib/definitions'
+import { CustomerField, InvoiceForm } from '@/lib/definitions'
 import { State, updateInvoice } from '@/lib/actions'
 import { toast } from '@/ui/toast'
 import { redirect } from 'next/navigation'
@@ -16,7 +16,8 @@ export default function EditInvoiceForm({
 }) {
   // const updateInvoiceWithId = updateInvoice.bind(null, invoice.id)
   const handleUpdateInvoice = async (prev: State, formData: FormData) => {
-    const resp = await updateInvoice(formData, invoice?.id)
+    if (!invoice?.id) return { message: 'Invoice not found' }
+    const resp = await updateInvoice(formData, invoice.id)
 
     if (resp.error) toast.error(resp.error)
     if (resp.success) {

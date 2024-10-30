@@ -7,8 +7,6 @@ For more information, see the [course curriculum](https://nextjs.org/learn) on t
 ## Next steps
 
 - hydrated errors
-- eslint
-- sign out refreshes google auth
 - tests
 - Don't clean form data on error
 - order columns by click
@@ -18,3 +16,5 @@ For more information, see the [course curriculum](https://nextjs.org/learn) on t
 - Edit and Delete optimistic updates
 - Edit and Delete rollback on error
 - sign up form
+- face cleaning
+- add sentry and other useful third parties
