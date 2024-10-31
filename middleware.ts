@@ -1,7 +1,6 @@
 import NextAuth from 'next-auth'
 import { authConfig } from '@/auth/auth.config'
 import { NextRequest, NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
 
 export const session = NextAuth(authConfig).auth
 const protectedRoutes = ['/dashboard', '/dashboard/*']
@@ -13,8 +12,6 @@ export const config = {
 
 export default async function middleware(req: NextRequest) {
   const currentSession = await session()
-  console.log('🚀 ~ middleware ~ currentSession:', currentSession)
-  const cookie = await cookies()
   if (!currentSession?.user && protectedRoutes.includes(req.nextUrl.pathname)) {
     const absoluteURL = new URL('/login', req.nextUrl.origin)
     return NextResponse.redirect(absoluteURL.toString())

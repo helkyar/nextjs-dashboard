@@ -8,12 +8,12 @@ import { GeneralInvoiceForm } from '@/ui/invoices/invoice-form'
 
 export default function Form({ customers }: { customers: CustomerField[] }) {
   const handleCreateInvoice = async (prevState: State, formData: FormData) => {
-    const resp = await createInvoice(formData)
+    const { success, error, ...state } = await createInvoice(formData)
 
-    if (resp.success) toast.success(resp.success)
-    if (resp.error) toast.error(resp.error)
+    if (success) toast.success(success)
+    if (error) toast.error(error)
 
-    return resp
+    return state
   }
   const initialState: State = { message: null, errors: {} }
   const [state, formAction, isSubmitting] = useActionState(

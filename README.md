@@ -11,10 +11,13 @@ For more information, see the [course curriculum](https://nextjs.org/learn) on t
 - Don't clean form data on error
 - order columns by click
 - email auth provider
-- [best practices] route protection -> library
-- [best practices] authorization -> roles and shit
-- Edit and Delete optimistic updates
-- Edit and Delete rollback on error
+
+- [best practices] route protection
+- [best practices] route/components managed by permissions/roles
+- [best practices] error managing (internal and external(ui/text/lng) management)
+- useOptimistic
+- - Creation, Edit and Delete optimistic updates
+- - Creation, Edit and Delete ui rollback on error
 - sign up form
 - face cleaning
-- add sentry and other useful third parties
+- add sentry, sonar and other useful third parties

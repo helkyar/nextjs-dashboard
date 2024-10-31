@@ -17,15 +17,18 @@ export default function EditInvoiceForm({
   // const updateInvoiceWithId = updateInvoice.bind(null, invoice.id)
   const handleUpdateInvoice = async (prev: State, formData: FormData) => {
     if (!invoice?.id) return { message: 'Invoice not found' }
-    const resp = await updateInvoice(formData, invoice.id)
+    const { success, error, ...state } = await updateInvoice(
+      formData,
+      invoice.id
+    )
 
-    if (resp.error) toast.error(resp.error)
-    if (resp.success) {
-      toast.success(resp.success)
+    if (error) toast.error(error)
+    if (success) {
+      toast.success(success)
       redirect('/dashboard/invoices')
     }
 
-    return resp
+    return state
   }
 
   const initialState: State = { message: null, errors: {} }
