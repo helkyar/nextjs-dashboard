@@ -21,3 +21,4 @@ For more information, see the [course curriculum](https://nextjs.org/learn) on t
 - sign up form
 - face cleaning
 - add sentry, sonar and other useful third parties
+- refactor following featured/screaming design pattern

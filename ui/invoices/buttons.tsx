@@ -34,7 +34,7 @@ export function DeleteInvoice({ id }: { id: string }) {
   // const deleteInvoiceWithId = deleteInvoice.bind(null, id)
   const handleDelete = async () => {
     const resp = await deleteInvoice(id)
-    if (resp.success) toast.success('Invoice deleted successfully')
+    if (resp.success) toast.success(resp.success)
     if (resp.error) toast.error(resp.error)
   }
   const [_, formAction, isSubmitting] = useActionState(handleDelete, undefined)

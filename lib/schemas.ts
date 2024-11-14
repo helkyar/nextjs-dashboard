@@ -1,5 +1,7 @@
 import { schema } from '@/lib/schema-validation'
 
+//FIXME-PRIO-LOW: too many strings
+
 export const FormSchema = schema.object({
   id: schema.string(),
   customerId: schema.string({

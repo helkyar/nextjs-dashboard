@@ -3,7 +3,7 @@ import { authConfig } from '@/auth/auth.config'
 import { NextRequest, NextResponse } from 'next/server'
 
 export const session = NextAuth(authConfig).auth
-const protectedRoutes = ['/dashboard', '/dashboard/*']
+const protectedRoutes = ['/dashboard', '/dashboard/*', '/api/seed']
 
 export const config = {
   // https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher

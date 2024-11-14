@@ -9,3 +9,8 @@ export const authAccessControl = async <T, K>(
   if (!(await auth())) return { error: 'Action not permitted. Invalid user' }
   return (...args: Args<T[]>) => action(...args)
 }
+
+export const isAllowed = async () => {
+  if (!(await auth())) return false
+  return true
+}

@@ -6,6 +6,8 @@ import { toast } from '@/ui/toast'
 import { useActionState } from 'react'
 import { GeneralInvoiceForm } from '@/ui/invoices/invoice-form'
 
+//FIXME-PRIO-LOW: single responsibility principle user interface (toaster)
+
 export default function Form({ customers }: { customers: CustomerField[] }) {
   const handleCreateInvoice = async (prevState: State, formData: FormData) => {
     const { success, error, ...state } = await createInvoice(formData)

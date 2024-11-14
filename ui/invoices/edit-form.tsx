@@ -7,6 +7,8 @@ import { redirect } from 'next/navigation'
 import { useActionState } from 'react'
 import { GeneralInvoiceForm } from '@/ui/invoices/invoice-form'
 
+//FIXME-PRIO-LOW: single responsibility principle user interface (toaster)
+
 export default function EditInvoiceForm({
   invoice,
   customers,

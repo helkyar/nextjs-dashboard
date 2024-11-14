@@ -3,14 +3,17 @@
 import { FormSchema, LoginSchema } from '@/lib/schemas'
 import { sql } from '@/lib/db-connection'
 import { revalidatePath } from 'next/cache'
-import { auth, signIn } from '@/auth/auth'
+import { signIn } from '@/auth/auth'
 import { AuthError } from 'next-auth'
 import { isRedirectError } from 'next/dist/client/components/redirect'
 import { validateFormData } from '@/lib/schema-validation'
+import { isAllowed } from '@/auth/auth-provider'
 // import { authAccessControl } from '@/auth/auth-provider'
 
-// hydration error
-// const dateToDatabase = () => new Date().toISOString().split('T')[0]
+//FIXME-PRIO-MID: single responsibility principle error handling
+//FIXME-PRIO-MID: single responsibility principle auth wrapper
+//FIXME-PRIO-MID: single responsibility principle db call
+//FIXME-PRIO-LOW: too many strings
 
 export type State = {
   errors?: {
@@ -27,7 +30,7 @@ const CreateInvoice = FormSchema.omit({ id: true, date: true })
 export async function createInvoice(
   formData: FormData
 ): Promise<ExtendedState> {
-  if (!(await auth())) return { error: 'Log in to update an invoice.' }
+  if (!(await isAllowed())) return { error: 'Log in to Create an invoice.' }
 
   const validatedFields = validateFormData(CreateInvoice, formData, {
     errorMessage: 'Missing Fields. Failed to Create Invoice.',
@@ -56,7 +59,7 @@ export async function updateInvoice(
   formData: FormData,
   id: string
 ): Promise<ExtendedState> {
-  if (!(await auth())) return { error: 'Log in to update an invoice.' }
+  if (!(await isAllowed())) return { error: 'Log in to update an invoice.' }
 
   const validatedFields = validateFormData(UpdateInvoice, formData, {
     errorMessage: 'Missing Fields. Failed to Update Invoice.',
@@ -83,7 +86,7 @@ export async function updateInvoice(
 }
 
 export async function deleteInvoice(id: string) {
-  if (!(await auth())) return { error: 'Log in to delete an invoice.' }
+  if (!(await isAllowed())) return { error: 'Log in to delete an invoice.' }
   try {
     await sql`
     DELETE FROM invoices
