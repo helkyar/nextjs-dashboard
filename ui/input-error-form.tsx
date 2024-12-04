@@ -4,8 +4,8 @@ export default function InputErrorMessage({
   error,
   id,
 }: {
-  error: undefined | null | string
-  id: string
+  readonly error: undefined | null | string
+  readonly id: string
 }) {
   if (!error) return null
   return (

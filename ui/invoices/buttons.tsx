@@ -1,5 +1,5 @@
 'use client'
-import { deleteInvoice } from '@/lib/actions'
+import { deleteInvoice } from '@/app/dashboard/invoices/_lib/actions'
 import { Button } from '@/ui/button'
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { Route } from 'next'

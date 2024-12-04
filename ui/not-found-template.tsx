@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { FaceFrownIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/navigation'
 
-export default function NotFoundTemplate({ text }: { text: string }) {
+export default function NotFoundTemplate({ text }: { readonly text: string }) {
   const { back } = useRouter()
   return (
     <main className='flex h-full flex-col items-center justify-center gap-2'>

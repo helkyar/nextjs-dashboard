@@ -26,11 +26,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     // Resend, // server error if not configured properly
     Credentials({
       async authorize(credentials) {
+        console.log('🚀 ~ authorize ~ credentials:', credentials)
         const parsedCredentials = LoginSchema.safeParse(credentials)
 
         if (parsedCredentials.success) {
           const { email, password } = parsedCredentials.data
           const user = await getUser(email)
+          console.log('🚀 ~ authorize ~ user:', user)
           if (!user) return null
 
           const passwordsMatch = await bcrypt.compare(password, user.password)
