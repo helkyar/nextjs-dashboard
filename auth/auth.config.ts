@@ -1,7 +1,7 @@
 import type { NextAuthConfig } from 'next-auth'
 import github from 'next-auth/providers/github'
 import google from 'next-auth/providers/google'
-import resend from 'next-auth/providers/resend'
+// import resend from 'next-auth/providers/resend'
 
 export const authConfig = {
   pages: {
@@ -10,7 +10,6 @@ export const authConfig = {
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user
-      console.log('🚀 ~ authorized ~ isLoggedIn:', isLoggedIn)
       const isOnDashboard = nextUrl.pathname.startsWith('/dashboard')
       if (isOnDashboard) {
         if (isLoggedIn) return true

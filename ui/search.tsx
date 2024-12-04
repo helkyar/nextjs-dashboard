@@ -4,8 +4,8 @@ import { useParamsFromUrl } from '@/lib/params-url'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 
 type PropTypes = {
-  placeholder: string
-  query?: string
+  readonly placeholder: string
+  readonly query?: string
 }
 
 export default function Search({ placeholder, query = 'query' }: PropTypes) {
