@@ -1,5 +1,5 @@
+import CreateCustomerForm from '@/ui/customers/create-customer'
 import Breadcrumbs from '@/ui/invoices/breadcrumbs'
-import CreateCustomerForm from '@/ui/invoices/create-customer'
 
 export default async function CreateCustomers() {
   return (

@@ -1,7 +1,7 @@
 import Breadcrumbs from '@/ui/invoices/breadcrumbs'
 import { fetchCustomerById } from '@/lib/data'
 import { notFound } from 'next/navigation'
-import EditCustomerForm from '@/ui/invoices/edit-customer'
+import EditCustomerForm from '@/ui/customers/edit-customer'
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params

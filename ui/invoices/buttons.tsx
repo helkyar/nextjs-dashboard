@@ -35,7 +35,7 @@ export function UpdateInvoice({ id }: { id: string }) {
   return (
     <Link
       href={`/dashboard/invoices/${id}/edit`}
-      className='rounded-md border p-2 hover:bg-gray-100'
+      className='rounded-md border p-2 hover:bg-blue-600 hover:text-white'
     >
       <PencilIcon className='w-5' />
     </Link>
@@ -56,7 +56,7 @@ export function DeleteInvoice({ id }: { id: string }) {
       <Button
         disabled={isSubmitting}
         type='submit'
-        className='rounded-md border hover:bg-gray-100 bg-gray-50 px-[.5rem] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 active:bg-gray-100'
+        className='rounded-md border hover:bg-red-500 hover:stroke-white bg-gray-50 px-[.5rem] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 active:bg-gray-100'
       >
         <span className='sr-only'>Delete</span>
         <TrashIcon className='w-5 fill-gray-600' />
@@ -69,7 +69,7 @@ export function UpdateCustomer({ id }: { id: string }) {
   return (
     <Link
       href={`/dashboard/customers/${id}/edit`}
-      className='rounded-md border p-2 hover:bg-gray-100'
+      className='rounded-md border p-2 hover:bg-blue-600 hover:text-white'
     >
       <PencilIcon className='w-5' />
     </Link>
@@ -89,7 +89,7 @@ export function DeleteCustomer({ id }: { id: string }) {
       <Button
         disabled={isSubmitting}
         type='submit'
-        className='rounded-md border hover:bg-gray-100 bg-gray-50 px-[.5rem] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 active:bg-gray-100'
+        className='rounded-md border hover:bg-red-500 hover:stroke-white bg-gray-50 px-[.5rem] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 active:bg-gray-100'
       >
         <span className='sr-only'>Delete</span>
         <TrashIcon className='w-5 fill-gray-600' />
