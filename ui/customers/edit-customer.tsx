@@ -5,7 +5,7 @@ import { toast } from '@/ui/toast'
 import { redirect } from 'next/navigation'
 import { useActionState } from 'react'
 import { State, updateCustomer } from '@/app/dashboard/customers/_lib/actions'
-import { GeneralCustomerForm } from '@/ui/invoices/customer-form'
+import { GeneralCustomerForm } from '@/ui/customers/customer-form'
 
 //FIXME-PRIO-LOW: single responsibility principle user interface (toaster)
 
