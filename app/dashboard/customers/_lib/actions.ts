@@ -4,87 +4,110 @@ import { validateFormData } from '@/lib/schema-validation'
 import { sql } from '@/lib/db-connection'
 import { revalidatePath } from 'next/cache'
 import { CostumerSchema } from '@/app/dashboard/customers/_lib/schemas'
+import fs from 'fs/promises'
+
+const customerTable = 'customers'
 
 export type State = {
   errors?: {
-    customerId?: string[]
-    amount?: string[]
-    status?: string[]
+    customerName?: string[]
+    email?: string[]
+    image?: string[]
   }
   message?: string | null
 }
 type ExtendedState = State & { success?: string; error?: string }
 
-const CreateInvoice = CostumerSchema.omit({ id: true, date: true })
-export async function createInvoice(
+const CreateCustomerSchema = CostumerSchema.omit({ id: true })
+
+export async function createCustomer(
   formData: FormData
 ): Promise<ExtendedState> {
   if (!(await isAllowed())) return { error: 'Log in to Create a costumer.' }
 
-  const validatedFields = validateFormData(CreateInvoice, formData, {
-    errorMessage: 'Missing Fields. Failed to Create Invoice.',
+  const validatedFields = validateFormData(CreateCustomerSchema, formData, {
+    errorMessage: 'Missing Fields. Failed to Create Customer.',
   })
 
   if (validatedFields.error) return validatedFields.error
-  const { customerId, amount, status } = validatedFields.data
-  const amountInCents = amount * 100
-  const date = new Date().toISOString().split('T')[0]
+  const { customerName, email, image } = validatedFields.data
 
   try {
+    const imageUrl = `/customers/${image.name}`
+    await fs.writeFile(
+      `public${imageUrl}`,
+      new Uint8Array(await image.arrayBuffer())
+    )
     await sql`
-  INSERT INTO invoices (customer_id, amount, status, date)
-  VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
+  INSERT INTO ${customerTable} (name, email, image_url)
+  VALUES (${customerName}, ${email}, ${imageUrl})
 `
-    return { success: 'Invoice created successfully.' }
+    return { success: 'Customer created successfully.' }
   } catch {
-    return { error: 'Database Error: Failed to Create Invoice.' }
+    return { error: 'Database Error: Failed to Create Customer.' }
   } finally {
-    revalidatePath('/dashboard/invoices')
+    revalidatePath('/dashboard/customers')
   }
 }
 
-const UpdateInvoice = CostumerSchema.omit({ id: true, date: true })
-export async function updateInvoice(
+const UpdateCustomerSchema = CostumerSchema.omit({ id: true }).partial({
+  image: true,
+})
+export async function updateCustomer(
   formData: FormData,
   id: string
 ): Promise<ExtendedState> {
-  if (!(await isAllowed())) return { error: 'Log in to update an invoice.' }
+  if (!(await isAllowed())) return { error: 'Log in to update a Customer.' }
 
-  const validatedFields = validateFormData(UpdateInvoice, formData, {
-    errorMessage: 'Missing Fields. Failed to Update Invoice.',
+  const validatedFields = validateFormData(UpdateCustomerSchema, formData, {
+    errorMessage: 'Missing Fields. Failed to Update Customer.',
   })
 
   if (validatedFields.error) return validatedFields.error
-  const { customerId, amount, status } = validatedFields.data
-  const amountInCents = amount * 100
+  const { customerName, email, image } = validatedFields.data
+
   try {
-    await sql`
-      UPDATE invoices
-      SET customer_id = ${customerId}, 
-      amount = ${amountInCents}, 
-      status = ${status}
+    if (image) {
+      const imageUrl = `/customers/${image.name}`
+      await fs.writeFile(
+        `public${imageUrl}`,
+        new Uint8Array(await image.arrayBuffer())
+      )
+      await sql`
+      UPDATE ${customerTable}
+      SET name = ${customerName}, 
+      email = ${email}, 
+      image_url = ${imageUrl}
       WHERE id = ${id}
     `
+    } else {
+      await sql`
+      UPDATE ${customerTable}
+      SET name = ${customerName}, 
+      email = ${email}, 
+      WHERE id = ${id}
+      `
+    }
 
-    return { success: 'Invoice updated successfully.' }
+    return { success: 'Customer updated successfully.' }
   } catch {
-    return { error: 'Invoice update failed.' }
+    return { error: 'Customer update failed.' }
   } finally {
-    revalidatePath('/dashboard/invoices')
+    revalidatePath('/dashboard/customers')
   }
 }
 
-export async function deleteInvoice(id: string) {
-  if (!(await isAllowed())) return { error: 'Log in to delete an invoice.' }
+export async function deleteCustomer(id: string) {
+  if (!(await isAllowed())) return { error: 'Log in to delete a Customer.' }
   try {
     await sql`
-    DELETE FROM invoices
+    DELETE FROM ${customerTable}
     WHERE id = ${id}
     `
-    return { success: 'Invoice deleted successfully.' }
+    return { success: 'Customer deleted successfully.' }
   } catch {
-    return { error: 'Invoice deletion failed.' }
+    return { error: 'Customer deletion failed.' }
   } finally {
-    revalidatePath('/dashboard/invoices')
+    revalidatePath('/dashboard/customers')
   }
 }

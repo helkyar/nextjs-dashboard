@@ -1,18 +1,26 @@
 'use server'
 
-import { LoginSchema } from '@/lib/schemas'
+import { LoginSchema } from '@/app/login/_lib/schemas'
 import { signIn } from '@/auth/auth'
 import { AuthError } from 'next-auth'
 import { isRedirectError } from 'next/dist/client/components/redirect'
 import { validateFormData } from '@/lib/schema-validation'
-// import { authAccessControl } from '@/auth/auth-provider'
 
 //FIXME-PRIO-MID: single responsibility principle error handling
 //FIXME-PRIO-MID: single responsibility principle auth wrapper
 //FIXME-PRIO-MID: single responsibility principle db call
 //FIXME-PRIO-LOW: too many strings
 
-export async function authenticate(formData: FormData) {
+export type LoginState = {
+  errors?: {
+    email?: string[]
+    password?: string[]
+  }
+  message?: string | null
+}
+type ExtendedState = LoginState & { success?: string; error?: string }
+
+export async function authenticate(formData: FormData): Promise<ExtendedState> {
   const validatedFields = validateFormData(LoginSchema, formData)
   if (validatedFields.error) return validatedFields.error
 

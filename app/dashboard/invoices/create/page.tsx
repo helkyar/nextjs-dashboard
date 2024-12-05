@@ -1,8 +1,8 @@
-import Form from '@/ui/invoices/create-form'
 import Breadcrumbs from '@/ui/invoices/breadcrumbs'
 import { fetchCustomers } from '@/lib/data'
+import CreateInvoiceForm from '@/ui/invoices/create-invoice'
 
-export default async function Page() {
+export default async function CreateInvoice() {
   const customers = await fetchCustomers()
 
   return (
@@ -17,7 +17,7 @@ export default async function Page() {
           },
         ]}
       />
-      <Form customers={customers} />
+      <CreateInvoiceForm customers={customers} />
     </main>
   )
 }

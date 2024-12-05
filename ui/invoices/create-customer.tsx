@@ -1,20 +1,15 @@
 'use client'
 
-import { CustomerField } from '@/lib/definitions'
 import { toast } from '@/ui/toast'
 import { useActionState } from 'react'
-import { GeneralInvoiceForm } from '@/ui/invoices/invoice-form'
-import { createInvoice, State } from '@/app/dashboard/invoices/_lib/actions'
+import { GeneralCustomerForm } from '@/ui/invoices/customer-form'
+import { createCustomer, State } from '@/app/dashboard/customers/_lib/actions'
 
 //FIXME-PRIO-LOW: single responsibility principle user interface (toaster)
 
-export default function Form({
-  customers,
-}: {
-  readonly customers: CustomerField[]
-}) {
+export default function CreateCustomerForm() {
   const handleCreateInvoice = async (_: State, formData: FormData) => {
-    const { success, error, ...state } = await createInvoice(formData)
+    const { success, error, ...state } = await createCustomer(formData)
 
     if (success) toast.success(success)
     if (error) toast.error(error)
@@ -27,10 +22,9 @@ export default function Form({
     initialState
   )
   return (
-    <GeneralInvoiceForm
+    <GeneralCustomerForm
       state={state}
       action={formAction}
-      customers={customers}
       isSubmitting={isSubmitting}
     />
   )

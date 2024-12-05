@@ -1,4 +1,4 @@
-import { githubLogin } from '@/lib/actions'
+import { githubLogin } from '@/app/login/_lib/actions'
 import { Button } from '@/ui/button'
 import { GithubIcon } from '@/ui/icons'
 
