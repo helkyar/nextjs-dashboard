@@ -1,6 +1,14 @@
 import bcrypt from 'bcrypt'
 import { db } from '@/lib/db-connection'
 import { invoices, customers, revenue, users } from './placeholder-data'
+import fs from 'fs/promises'
+import amy from './customers/amy-burns.png'
+import balazs from './customers/balazs-orban.png'
+import delba from './customers/delba-de-oliveira.png'
+import evil from './customers/evil-rabbit.png'
+import lee from './customers/lee-robinson.png'
+import michael from './customers/michael-novotny.png'
+const images = [evil, delba, lee, michael, amy, balazs]
 
 const client = await db.connect()
 
@@ -102,11 +110,24 @@ async function seedRevenue() {
 }
 
 export async function GET() {
-  return Response.json({
-    message:
-      'Nice try, precautions have been taken to avoid this naughty behavior 🎅',
-  })
+  // return Response.json({
+  //   message:
+  //     'Nice try, precautions have been taken to avoid this naughty behavior 🎅',
+  // })
+  // Drop all tables
+  // check if user images exist in public/customers
+  // create them if not
   try {
+    customers.forEach(async (customer, i) => {
+      const path = `public/customers/${customer.image_url}`
+      try {
+        const imageBuffer = Buffer.from(images[i].src.split(',')[1], 'base64')
+        await fs.writeFile(path, new Uint8Array(imageBuffer))
+      } catch (err) {
+        console.error(`Error writing file ${path}:`, err)
+      }
+    })
+
     await client.sql`BEGIN`
     await seedUsers()
     await seedCustomers()

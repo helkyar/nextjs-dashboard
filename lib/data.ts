@@ -1,6 +1,7 @@
 import { sql } from '@/lib/db-connection'
 import {
   CustomerField,
+  CustomerForm,
   CustomersTableType,
   InvoiceForm,
   InvoicesTable,
@@ -175,6 +176,25 @@ export async function fetchCustomers() {
   } catch (err) {
     console.error('Database Error:', err)
     throw new Error('Failed to fetch all customers.')
+  }
+}
+export async function fetchCustomerById(id: string) {
+  try {
+    const data = await sql<CustomerForm>`
+      SELECT
+        id,
+        name,
+        email,
+        image_url
+      FROM customers
+      WHERE id = ${id}
+    `
+
+    const customer = data.rows[0]
+    return customer
+  } catch (err) {
+    console.error('Database Error:', err)
+    throw new Error('Failed to fetch customers')
   }
 }
 

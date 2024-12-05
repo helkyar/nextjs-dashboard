@@ -4,24 +4,16 @@ import { AtSymbolIcon, KeyIcon } from '@heroicons/react/24/outline'
 import { ArrowRightIcon } from '@heroicons/react/20/solid'
 import { Button } from '@/ui/button'
 import { useActionState } from 'react'
-import { authenticate } from '@/lib/actions'
 import { toast } from '@/ui/toast'
 import GitHubLogin from '@/ui/login/github-login'
 import GoogleLogin from '@/ui/login/google-login'
 import InputError from '@/ui/input-error'
 import InputErrorMessage from '@/ui/input-error-form'
 import { redirect } from 'next/navigation'
-
-type LoginState = {
-  errors?: {
-    email?: string[]
-    password?: string[]
-  }
-  message?: string | null
-}
+import { authenticate, LoginState } from '@/app/login/_lib/actions'
 
 export default function LoginForm() {
-  const handleLogin = async (prevState: LoginState, formData: FormData) => {
+  const handleLogin = async (_: LoginState, formData: FormData) => {
     const resp = await authenticate(formData)
     if (resp.error) toast.error(resp.error)
     if (resp.success) {

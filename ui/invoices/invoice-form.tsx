@@ -10,8 +10,8 @@ import InputError from '@/ui/input-error'
 import InputErrorMessage from '@/ui/input-error-form'
 import Link from 'next/link'
 import { Button } from '@/ui/button'
-import { State } from '@/lib/actions'
 import clsx from 'clsx'
+import { State } from '@/app/dashboard/invoices/_lib/actions'
 
 export function GeneralInvoiceForm({
   invoice,

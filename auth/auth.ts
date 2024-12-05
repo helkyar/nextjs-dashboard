@@ -4,9 +4,9 @@ import Credentials from 'next-auth/providers/credentials'
 import type { User } from '@/lib/definitions'
 import bcrypt from 'bcrypt'
 import { sql } from '@/lib/db-connection'
-import { LoginSchema } from '@/lib/schemas'
 import GitHub from 'next-auth/providers/github'
 import Google from 'next-auth/providers/google'
+import { LoginSchema } from '@/app/login/_lib/schemas'
 
 async function getUser(email: string): Promise<User | undefined> {
   try {
