@@ -18,7 +18,7 @@ export function CreateInvoice() {
   return (
     <Link
       href={'/dashboard/invoices/create' as Route}
-      className='flex h-10 items-center rounded-lg bg-blue-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600'
+      className='flex h-10 items-center font-medium button'
     >
       <span className='hidden md:block'>Create Invoice</span>
       <PlusIcon className='h-5 md:ml-4' />
@@ -29,7 +29,7 @@ export function CreateCustomer() {
   return (
     <Link
       href={'/dashboard/customers/create' as Route}
-      className='flex h-10 items-center rounded-lg bg-blue-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600'
+      className='flex h-10 items-center font-medium button'
     >
       <span className='hidden md:block'>Create Customer</span>
       <PlusIcon className='h-5 md:ml-4' />
@@ -41,8 +41,9 @@ export function UpdateInvoice({ id }: { id: string }) {
   return (
     <Link
       href={`/dashboard/invoices/${id}/edit`}
-      className='bg-gray-50 rounded-md border p-2 hover:bg-blue-600 hover:text-white'
+      className='bg-gray-50 rounded-md border p-2 hover:bg-accent focus-visible:bg-accent hover:text-accent-foreground focus-visible:text-accent-foreground'
     >
+      <span className='sr-only'>Edit</span>
       <PencilIcon className='w-5' />
     </Link>
   )
@@ -62,10 +63,10 @@ export function DeleteInvoice({ id }: { id: string }) {
       <Button
         disabled={isSubmitting}
         type='submit'
-        className='rounded-md border hover:bg-red-500 hover:stroke-white bg-gray-50 px-[.5rem] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 active:bg-gray-100'
+        className='group rounded-md border hover:bg-red-200 bg-gray-50 px-[.5rem] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 active:bg-gray-100'
       >
         <span className='sr-only'>Delete</span>
-        <TrashIcon className='w-5 fill-gray-600' />
+        <TrashIcon className='w-5 fill-gray-600 group-focus-visible:fill-red-200 group-hover:fill-red-200 group-hover:stroke-red-600 group-focus-visible:stroke-red-600' />
       </Button>
     </form>
   )
@@ -75,8 +76,9 @@ export function UpdateCustomer({ id }: { id: string }) {
   return (
     <Link
       href={`/dashboard/customers/${id}/edit`}
-      className='rounded-md border p-2 hover:bg-blue-600 hover:text-white bg-gray-50'
+      className='rounded-md border p-2 bg-gray-50 hover:bg-accent focus-visible:bg-accent hover:text-accent-foreground focus-visible:text-accent-foreground'
     >
+      <span className='sr-only'>Edit</span>
       <PencilIcon className='w-5' />
     </Link>
   )
@@ -95,10 +97,10 @@ export function DeleteCustomer({ id }: { id: string }) {
       <Button
         disabled={isSubmitting}
         type='submit'
-        className='rounded-md border hover:bg-red-500 hover:stroke-white bg-gray-50 px-[.5rem] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 active:bg-gray-100'
+        className='group rounded-md border hover:bg-red-200 bg-gray-50 px-[.5rem] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 active:bg-gray-100'
       >
         <span className='sr-only'>Delete</span>
-        <TrashIcon className='w-5 fill-gray-600' />
+        <TrashIcon className='w-5 fill-gray-600 group-focus-visible:fill-red-200 group-hover:fill-red-200 group-hover:stroke-red-600 group-focus-visible:stroke-red-600' />
       </Button>
     </form>
   )

@@ -37,6 +37,10 @@ export default async function CustomersTable({
                       </div>
                       <p className='text-sm text-gray-500'>{customer.email}</p>
                     </div>
+                    <div className='flex justify-end gap-2'>
+                      <UpdateCustomer id={customer.id} />
+                      <DeleteCustomer id={customer.id} />
+                    </div>
                   </div>
                   <div className='flex w-full items-center justify-between border-b py-5'>
                     <div className='flex w-1/2 flex-col'>
@@ -82,7 +86,7 @@ export default async function CustomersTable({
                 {customers.map((customer) => (
                   <tr
                     key={customer.id}
-                    className='group w-full border-b py-3 text-sm  [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg'
+                    className='w-full border-b py-3 text-sm  [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg'
                   >
                     <td className='whitespace-nowrap bg-white py-5 pl-4 pr-3 text-sm text-black sm:pl-6'>
                       <div className='flex items-center gap-3'>

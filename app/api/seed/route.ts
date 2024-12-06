@@ -8,6 +8,7 @@ import delba from './customers/delba-de-oliveira.png'
 import evil from './customers/evil-rabbit.png'
 import lee from './customers/lee-robinson.png'
 import michael from './customers/michael-novotny.png'
+import { auth } from '@/auth/auth'
 const images = [evil, delba, lee, michael, amy, balazs]
 
 const client = await db.connect()
@@ -110,10 +111,14 @@ async function seedRevenue() {
 }
 
 export async function GET() {
-  // return Response.json({
-  //   message:
-  //     'Nice try, precautions have been taken to avoid this naughty behavior 🎅',
-  // })
+  const user = await auth()
+
+  if (!user || user?.user?.email !== process.env.ADMIN_EMAIL) {
+    return Response.json({
+      message:
+        'Nice try, precautions have been taken to avoid this naughty behavior 🎅',
+    })
+  }
   // Drop all tables
   // check if user images exist in public/customers
   // create them if not
