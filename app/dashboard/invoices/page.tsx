@@ -5,10 +5,8 @@ import { CreateInvoice } from '@/ui/invoices/buttons'
 import { lusitana } from '@/ui/fonts'
 import { InvoicesTableSkeleton } from '@/ui/skeletons'
 import { Suspense } from 'react'
-import { fetchInvoicesPages } from '@/lib/data'
+import { fetchInvoicesPages, getUrlParams } from '@/lib/data'
 import { Metadata } from 'next'
-
-const searchQuery: string = 'query'
 
 type PropTypes = {
   searchParams?: Promise<{
@@ -20,10 +18,8 @@ type PropTypes = {
 export const metadata: Metadata = {
   title: 'Invoices',
 }
-export default async function Page(props: PropTypes) {
-  const searchParams = await props.searchParams
-  const query = searchParams?.[searchQuery] || ''
-  const currentPage = Number(searchParams?.page) || 1
+export default async function InvoicesPage(props: PropTypes) {
+  const { query, currentPage, searchQuery } = await getUrlParams(props)
 
   const totalPages = await fetchInvoicesPages(query)
 
