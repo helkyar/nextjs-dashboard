@@ -1,7 +1,7 @@
 import { inter } from '@/ui/fonts'
 import '@/ui/global.css'
 import { Toaster } from '@/ui/toast'
-
+import './globals.css'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {

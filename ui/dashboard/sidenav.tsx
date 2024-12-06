@@ -8,11 +8,11 @@ export default function SideNav() {
   return (
     <div className='flex h-full flex-col px-3 py-4 md:px-2'>
       <Link
-        className='relative mb-2 flex items-end justify-start rounded-md bg-blue-600 p-4 h-24'
+        className='relative mb-2 flex items-center justify-center button p-4 h-24 bg-logo'
         href='/'
       >
-        <div className='w-32 text-white md:w-40 absolute top-6 left-6'>
-          <AcmeLogo />
+        <div className='text-white md:w-40'>
+          <AcmeLogo nav />
         </div>
       </Link>
       <div className='flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2'>
@@ -26,7 +26,7 @@ export default function SideNav() {
         >
           <button className='flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-red-100 hover:text-red-600 md:flex-none md:justify-start md:p-2 md:px-3'>
             <PowerIcon className='w-6' />
-            <div className='hidden md:block'>Sign Out</div>
+            <div className='hidden md:group-hover:block'>Sign Out</div>
           </button>
         </form>
       </div>
