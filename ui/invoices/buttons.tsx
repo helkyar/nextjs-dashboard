@@ -2,9 +2,15 @@
 import { deleteCustomer } from '@/app/dashboard/customers/_lib/actions'
 import { deleteInvoice } from '@/app/dashboard/invoices/_lib/actions'
 import { Button } from '@/ui/button'
-import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
+import {
+  ArrowPathIcon,
+  PencilIcon,
+  PlusIcon,
+  TrashIcon,
+} from '@heroicons/react/24/outline'
 import { Route } from 'next'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useActionState } from 'react'
 import { toast } from 'sonner'
 
@@ -95,5 +101,14 @@ export function DeleteCustomer({ id }: { id: string }) {
         <TrashIcon className='w-5 fill-gray-600' />
       </Button>
     </form>
+  )
+}
+
+export function RefreshInvoices() {
+  const router = useRouter()
+  return (
+    <button onClick={() => router.refresh()}>
+      <ArrowPathIcon className='h-5 w-5 text-gray-500' />
+    </button>
   )
 }

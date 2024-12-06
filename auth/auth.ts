@@ -6,7 +6,7 @@ import bcrypt from 'bcrypt'
 import { sql } from '@/lib/db-connection'
 import GitHub from 'next-auth/providers/github'
 import Google from 'next-auth/providers/google'
-import { LoginSchema } from '@/app/login/_lib/schemas'
+import { LoginSchema } from '@/app/_lib/schemas'
 
 async function getUser(email: string): Promise<User | undefined> {
   try {
