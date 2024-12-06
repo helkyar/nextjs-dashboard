@@ -1,4 +1,4 @@
-import { googleLogin } from '@/app/login/_lib/actions'
+import { googleLogin } from '@/app/_lib/actions'
 import { Button } from '@/ui/button'
 import Image from 'next/image'
 

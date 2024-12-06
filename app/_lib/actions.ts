@@ -1,6 +1,6 @@
 'use server'
 
-import { LoginSchema } from '@/app/login/_lib/schemas'
+import { LoginSchema } from '@/app/_lib/schemas'
 import { signIn } from '@/auth/auth'
 import { AuthError } from 'next-auth'
 import { isRedirectError } from 'next/dist/client/components/redirect'

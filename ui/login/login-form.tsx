@@ -10,7 +10,7 @@ import GoogleLogin from '@/ui/login/google-login'
 import InputError from '@/ui/input-error'
 import InputErrorMessage from '@/ui/input-error-form'
 import { redirect } from 'next/navigation'
-import { authenticate, LoginState } from '@/app/login/_lib/actions'
+import { authenticate, LoginState } from '@/app/_lib/actions'
 
 export default function LoginForm() {
   const handleLogin = async (_: LoginState, formData: FormData) => {

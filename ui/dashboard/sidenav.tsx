@@ -6,12 +6,12 @@ import { signOut } from '@/auth/auth'
 
 export default function SideNav() {
   return (
-    <div className='flex flex-col px-3 py-4 md:px-2 h-full'>
+    <div className='flex h-full flex-col px-3 py-4 md:px-2'>
       <Link
-        className='mb-2 flex h-20 items-end justify-start rounded-md bg-blue-600 p-4 md:h-40'
+        className='relative mb-2 flex items-end justify-start rounded-md bg-blue-600 p-4 h-24'
         href='/'
       >
-        <div className='w-32 text-white md:w-40'>
+        <div className='w-32 text-white md:w-40 absolute top-6 left-6'>
           <AcmeLogo />
         </div>
       </Link>
@@ -21,9 +21,7 @@ export default function SideNav() {
         <form
           action={async () => {
             'use server'
-            await signOut({ redirectTo: '/', redirect: true })
-            // const data = await signOut({redirect: false, redirectTo: "/"})
-            // useRouter().push(data.url)
+            await signOut()
           }}
         >
           <button className='flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-red-100 hover:text-red-600 md:flex-none md:justify-start md:p-2 md:px-3'>
