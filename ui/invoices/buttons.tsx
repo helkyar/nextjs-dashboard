@@ -35,7 +35,7 @@ export function UpdateInvoice({ id }: { id: string }) {
   return (
     <Link
       href={`/dashboard/invoices/${id}/edit`}
-      className='rounded-md border p-2 hover:bg-blue-600 hover:text-white'
+      className='bg-gray-50 rounded-md border p-2 hover:bg-blue-600 hover:text-white'
     >
       <PencilIcon className='w-5' />
     </Link>
@@ -69,7 +69,7 @@ export function UpdateCustomer({ id }: { id: string }) {
   return (
     <Link
       href={`/dashboard/customers/${id}/edit`}
-      className='rounded-md border p-2 hover:bg-blue-600 hover:text-white'
+      className='rounded-md border p-2 hover:bg-blue-600 hover:text-white bg-gray-50'
     >
       <PencilIcon className='w-5' />
     </Link>
