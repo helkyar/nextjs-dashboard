@@ -123,6 +123,10 @@ export async function GET() {
   // check if user images exist in public/customers
   // create them if not
   try {
+    const customerDir = 'public/customers'
+    const files = await fs.readdir(customerDir)
+    await Promise.all(files.map((file) => fs.unlink(`${customerDir}/${file}`)))
+
     customers.forEach(async (customer, i) => {
       const path = `public/customers/${customer.image_url}`
       try {
@@ -132,6 +136,10 @@ export async function GET() {
         console.error(`Error writing file ${path}:`, err)
       }
     })
+
+    await client.sql`
+      DROP TABLE IF EXISTS users, invoices, customers, revenue;
+    `
 
     await client.sql`BEGIN`
     await seedUsers()
