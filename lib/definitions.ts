@@ -50,7 +50,7 @@ export type InvoicesTable = {
   name: string
   email: string
   image_url: string
-  date: string
+  created_at: string
   amount: number
   status: 'pending' | 'paid'
 }
@@ -85,7 +85,9 @@ export type InvoiceForm = {
   customer_id: string
   amount: number
   status: 'pending' | 'paid'
+  due_at: string
 }
+
 export type CustomerForm = {
   id: string
   name: string

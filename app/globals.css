@@ -86,19 +86,4 @@
     @apply bg-gradient-to-br from-[#01268f] via-violet-600 to-[#72c8c7];
     background-repeat: no-repeat, repeat;
   }
-  .mobile-hero-gradient {
-    -webkit-mask-image: -webkit-gradient(
-      linear,
-      left top,
-      left bottom,
-      from(rgba(0, 0, 0, 1)),
-      to(rgba(0, 0, 0, 0)) 90%
-    );
-    mask-image: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 1) 80%,
-      rgba(0, 0, 0, 0) 95%,
-      rgba(0, 0, 0, 0)
-    );
-  }
 }

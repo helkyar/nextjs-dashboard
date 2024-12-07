@@ -27,7 +27,7 @@ export default function LandingPage() {
           src='/hero-mobile-final.png'
           width={560}
           height={620}
-          className='block md:hidden mobile-hero-gradient'
+          className='block md:hidden'
           alt='Screenshots of the dashboard project showing mobile version'
         />
       </div>

@@ -1,7 +1,7 @@
 'use server'
 
 import { LoginSchema } from '@/app/_lib/schemas'
-import { signIn } from '@/auth/auth'
+import { signIn, signOut } from '@/auth/auth'
 import { AuthError } from 'next-auth'
 import { isRedirectError } from 'next/dist/client/components/redirect'
 import { validateFormData } from '@/lib/schema-validation'
@@ -50,4 +50,8 @@ export async function githubLogin() {
 }
 export async function emailLogin(formData: FormData) {
   await signIn('resend', formData)
+}
+
+export async function logout() {
+  await signOut()
 }

@@ -11,5 +11,6 @@ export const InvoiceSchema = schema.object({
   status: schema.enum(['pending', 'paid'], {
     invalid_type_error: 'Please select an invoice status.',
   }),
-  date: schema.string(),
+  createdAt: schema.string(),
+  due: schema.string(),
 })

@@ -1,7 +1,13 @@
 import { lusitana } from '@/ui/fonts'
 import clsx from 'clsx'
 
-export default function AcmeLogo({ nav }: { nav?: boolean }) {
+export default function AcmeLogo({
+  nav,
+  isOpen,
+}: {
+  nav?: boolean
+  isOpen?: boolean
+}) {
   return (
     <div
       className={`${lusitana.className} flex gap-2 flex-row items-center leading-none`}
@@ -9,7 +15,8 @@ export default function AcmeLogo({ nav }: { nav?: boolean }) {
       <Logo className='h-10 w-10 fill-white' />
       <p
         className={clsx('text-[24px] text-white font-bold', {
-          ['md:hidden md:group-hover:block']: nav,
+          ['md:hidden']: nav && !isOpen,
+          ['md:block']: !nav || isOpen,
         })}
       >
         Invoice Master

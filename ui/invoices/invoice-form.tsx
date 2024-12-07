@@ -89,8 +89,30 @@ export function GeneralInvoiceForm({
                 />
                 <CurrencyDollarIcon className='pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900' />
               </div>
-            </div>{' '}
+            </div>
             <InputError id='amount-error' errors={state.errors?.amount} />
+          </div>
+
+          {/* Invoice Due Date */}
+          <div className='mb-4'>
+            <label htmlFor='amount' className='mb-2 block text-sm font-medium'>
+              Choose due date
+            </label>
+            <div className='relative mt-2 rounded-md'>
+              <div className='relative'>
+                <input
+                  id='due'
+                  name='due'
+                  type='date'
+                  defaultValue={invoice?.due_at}
+                  placeholder='Enter a due date'
+                  className='peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500'
+                  aria-describedby='due-error'
+                />
+                <CurrencyDollarIcon className='pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900' />
+              </div>
+            </div>
+            <InputError id='due-error' errors={state.errors?.due} />
           </div>
 
           {/* Invoice Status */}
@@ -158,8 +180,9 @@ export function GeneralInvoiceForm({
                 </div>
               </div>
             </div>
+            <InputError id='status-error' errors={state.errors?.status} />
           </fieldset>
-          <InputError id='status-error' errors={state.errors?.status} />
+
           <InputErrorMessage id='message-error' error={state.message} />
         </div>
         <div className='mt-6 flex justify-end gap-4'>
