@@ -25,10 +25,13 @@ export default async function InvoicesPage(props: PropTypes) {
 
   return (
     <div className='w-full'>
-      <div className='flex w-full items-center justify-between'>
+      <div className='flex w-full items-center justify-between mb-8'>
         <h1 className={`${lusitana.className} text-2xl`}>Invoices</h1>
       </div>
-      <div className='mt-4 flex items-center justify-between gap-2 md:mt-8'>
+      <p className='text-gray-500 px-2 text-sm'>
+        Use commas to refine your search results.
+      </p>
+      <div className='flex items-center justify-between gap-2'>
         <Search placeholder='Search invoices...' query={searchQuery} />
         <CreateInvoice />
       </div>

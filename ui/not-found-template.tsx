@@ -2,6 +2,7 @@
 import Link from 'next/link'
 import { FaceFrownIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/navigation'
+import { Button } from '@/ui/button'
 
 export default function NotFoundTemplate({ text }: { readonly text: string }) {
   const { back } = useRouter()
@@ -11,9 +12,9 @@ export default function NotFoundTemplate({ text }: { readonly text: string }) {
       <h2 className='text-xl font-semibold'>404 Not Found</h2>
       <p>{text}</p>
       <div className='flex gap-4'>
-        <Link onClick={back} href={''} className='mt-4 button'>
+        <Button onClick={back} className='mt-4'>
           Go Back
-        </Link>
+        </Button>
         <Link href='/' className='mt-4 button'>
           Go Home
         </Link>

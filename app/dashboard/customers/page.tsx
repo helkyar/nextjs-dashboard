@@ -29,7 +29,10 @@ export default async function CustomersPage(props: PropTypes) {
         Customers
       </h1>
 
-      <div className='mt-4 flex items-center justify-between gap-2 md:mt-8'>
+      <p className='text-gray-500 px-2 text-sm'>
+        Use comas to include more results
+      </p>
+      <div className='flex items-center justify-between gap-2'>
         <Search placeholder='Search customers...' query={searchQuery} />
         <CreateCustomer />
       </div>

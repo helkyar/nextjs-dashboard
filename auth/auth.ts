@@ -1,7 +1,7 @@
 import NextAuth from 'next-auth'
 import { authConfig } from './auth.config'
 import Credentials from 'next-auth/providers/credentials'
-import type { User } from '@/lib/definitions'
+import { User } from '@/lib/definitions'
 import bcrypt from 'bcrypt'
 import { sql } from '@/lib/db-connection'
 import GitHub from 'next-auth/providers/github'
@@ -23,17 +23,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
     Google,
     GitHub,
-    // Resend, // server error if not configured properly
     Credentials({
       async authorize(credentials) {
-        console.log('🚀 ~ authorize ~ credentials:', credentials)
         const parsedCredentials = LoginSchema.safeParse(credentials)
 
         if (parsedCredentials.success) {
           const { email, password } = parsedCredentials.data
           const user = await getUser(email)
-          console.log('🚀 ~ authorize ~ user:', user)
-          if (!user) return null
+          if (!user || !user.verified) return null
 
           const passwordsMatch = await bcrypt.compare(password, user.password)
           if (passwordsMatch) return user
