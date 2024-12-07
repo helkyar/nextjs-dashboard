@@ -1,5 +1,5 @@
 'use client'
-import { InvalidToken } from '@/app/validate/page'
+
 import { toast } from '@/ui/toast'
 import { redirect } from 'next/navigation'
 
@@ -22,3 +22,9 @@ export function ValidationWithToast({
     </div>
   )
 }
+
+export const InvalidToken = () => (
+  <div className='w-full h-full flex items-center justify-center'>
+    <h1 className='text-2xl'>Invalid token</h1>
+  </div>
+)

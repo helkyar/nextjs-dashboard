@@ -1,5 +1,5 @@
 import { validateToken } from '@/app/validate/_lib/actions'
-import { ValidationWithToast } from '@/ui/validate/validation'
+import { InvalidToken, ValidationWithToast } from '@/ui/validate/validation'
 import { Suspense } from 'react'
 
 type PropTypes = {
@@ -22,12 +22,6 @@ export default async function ValidateUser(props: PropTypes) {
 const Fallback = () => (
   <div className='w-full h-full flex items-center justify-center'>
     <h1 className='text-2xl'>Validating email...</h1>
-  </div>
-)
-
-export const InvalidToken = () => (
-  <div className='w-full h-full flex items-center justify-center'>
-    <h1 className='text-2xl'>Invalid token</h1>
   </div>
 )
 
