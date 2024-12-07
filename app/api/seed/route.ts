@@ -20,7 +20,10 @@ async function seedUsers() {
       id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
       name VARCHAR(255) NOT NULL,
       email TEXT NOT NULL UNIQUE,
-      password TEXT NOT NULL
+      password TEXT NOT NULL,
+      token TEXT,
+      verified BOOLEAN DEFAULT false,
+      created_at DATE DEFAULT NOW()
     );
   `
 
@@ -28,8 +31,8 @@ async function seedUsers() {
     users.map(async (user) => {
       const hashedPassword = await bcrypt.hash(user.password, 10)
       return client.sql`
-        INSERT INTO users (id, name, email, password)
-        VALUES (${user.id}, ${user.name}, ${user.email}, ${hashedPassword})
+        INSERT INTO users (id, name, email, password, token, verified)
+        VALUES (${user.id}, ${user.name}, ${user.email}, ${hashedPassword}, null, true)
         ON CONFLICT (id) DO NOTHING;
       `
     })

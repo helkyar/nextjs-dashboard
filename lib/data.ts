@@ -8,7 +8,8 @@ import {
   LatestInvoiceRaw,
   Revenue,
 } from './definitions'
-import { formatCurrency } from './utils'
+import { formatCurrency, formatDateToMonth } from './utils'
+import { QueryResult, QueryResultRow } from '@vercel/postgres'
 
 export async function fetchRevenue() {
   try {
@@ -76,6 +77,50 @@ export async function fetchCardData() {
   }
 }
 
+export function generateLikeClausesForInvoices(inputArray: string[]) {
+  if (!Array.isArray(inputArray) || inputArray.length === 0) {
+    throw new Error('Input must be a non-empty array of strings.')
+  }
+
+  // Prepare parameters with % wildcard for LIKE
+  const params = inputArray.map((value) => `%${value}%`)
+
+  // Build the dynamic query
+  const likeClauses = inputArray
+    .map(
+      (_, index) => `
+        (customers.name LIKE $${index + 1} OR
+        invoices.amount::text LIKE $${index + 1} OR
+        customers.email LIKE $${index + 1} OR
+        invoices.created_at::text LIKE $${index + 1} OR
+        invoices.status LIKE $${index + 1})
+      `
+    )
+    .join(' AND ')
+
+  return { likeClauses, params }
+}
+export function generateLikeClausesForCustomers(inputArray: string[]) {
+  if (!Array.isArray(inputArray) || inputArray.length === 0) {
+    throw new Error('Input must be a non-empty array of strings.')
+  }
+
+  // Prepare parameters with % wildcard for LIKE
+  const params = inputArray.map((value) => `%${value}%`)
+
+  // Build the dynamic query
+  const likeClauses = inputArray
+    .map(
+      (_, index) => `
+        customers.name LIKE $${index + 1} OR
+        customers.email LIKE $${index + 1}
+      `
+    )
+    .join(' OR ')
+
+  return { likeClauses, params }
+}
+
 const ITEMS_PER_PAGE = 6
 export async function fetchFilteredInvoices(
   query: string,
@@ -84,28 +129,28 @@ export async function fetchFilteredInvoices(
   const offset = (currentPage - 1) * ITEMS_PER_PAGE
 
   try {
-    const invoices = await sql<InvoicesTable>`
-      SELECT
-        invoices.id,
-        invoices.amount,
-        invoices.created_at,
-        invoices.status,
-        customers.name,
-        customers.email,
-        customers.image_url
-      FROM invoices
-      JOIN customers ON invoices.customer_id = customers.id
-      WHERE
-        customers.name ILIKE ${`%${query}%`} OR
-        customers.email ILIKE ${`%${query}%`} OR
-        invoices.amount::text ILIKE ${`%${query}%`} OR
-        invoices.created_at::text ILIKE ${`%${query}%`} OR
-        invoices.status ILIKE ${`%${query}%`}
-      ORDER BY invoices.created_at DESC
-      LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
-    `
+    const queries = query.split(',')
+    const { likeClauses, params } = generateLikeClausesForInvoices(queries)
 
-    return invoices.rows
+    const sqlQuery = `SELECT
+    invoices.id,
+    invoices.amount,
+    invoices.created_at,
+    invoices.status,
+    customers.name,
+    customers.email,
+    customers.image_url
+     FROM invoices
+     JOIN customers ON invoices.customer_id = customers.id
+     WHERE ${likeClauses}
+     ORDER BY invoices.created_at DESC
+     LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+     `
+
+    // Execute the query
+    const result = await sql.query<InvoicesTable>(sqlQuery, params)
+
+    return result.rows
   } catch (error) {
     console.error('Database Error:', error)
     throw new Error('Failed to fetch invoices.')
@@ -114,16 +159,15 @@ export async function fetchFilteredInvoices(
 
 export async function fetchInvoicesPages(query: string) {
   try {
-    const count = await sql`SELECT COUNT(*)
+    const queries = query.split(',')
+    const { likeClauses, params } = generateLikeClausesForInvoices(queries)
+
+    const sqlQuery = `SELECT COUNT(*)
     FROM invoices
     JOIN customers ON invoices.customer_id = customers.id
-    WHERE
-      customers.name ILIKE ${`%${query}%`} OR
-      customers.email ILIKE ${`%${query}%`} OR
-      invoices.amount::text ILIKE ${`%${query}%`} OR
-      invoices.created_at::text ILIKE ${`%${query}%`} OR
-      invoices.status ILIKE ${`%${query}%`}
+    WHERE ${likeClauses}
   `
+    const count = await sql.query(sqlQuery, params)
 
     const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE)
     return totalPages
@@ -179,12 +223,13 @@ export async function fetchCustomers() {
 
 export async function fetchCustomersPages(query: string) {
   try {
-    const count = await sql`SELECT COUNT(*)
+    const queries = query.split(',')
+    const { likeClauses, params } = generateLikeClausesForCustomers(queries)
+    const sqlQuery = `SELECT COUNT(*)
     FROM customers
-    WHERE
-      customers.name ILIKE ${`%${query}%`} OR
-      customers.email ILIKE ${`%${query}%`} 
-  `
+    WHERE ${likeClauses}
+    `
+    const count = await sql.query(sqlQuery, params)
 
     const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE)
     return totalPages
@@ -218,10 +263,12 @@ export async function fetchFilteredCustomers(
   query: string,
   currentPage: number
 ) {
-  console.log('🚀 ~ query:', query)
   const offset = (currentPage - 1) * ITEMS_PER_PAGE
   try {
-    const data = await sql<CustomersTableType>`
+    const queries = query.split(',')
+    const { likeClauses, params } = generateLikeClausesForCustomers(queries)
+
+    const sqlQuery = `
 		SELECT
 		  customers.id,
 		  customers.name,
@@ -232,14 +279,12 @@ export async function fetchFilteredCustomers(
 		  SUM(CASE WHEN invoices.status = 'paid' THEN invoices.amount ELSE 0 END) AS total_paid
 		FROM customers
 		LEFT JOIN invoices ON customers.id = invoices.customer_id
-		WHERE
-		  customers.name ILIKE ${`%${query}%`} OR
-        customers.email ILIKE ${`%${query}%`}
+		WHERE ${likeClauses}
 		GROUP BY customers.id, customers.name, customers.email, customers.image_url
 		ORDER BY customers.name ASC
     LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
 	  `
-    console.log('🚀 ~ data:', data)
+    const data = await sql.query<CustomersTableType>(sqlQuery, params)
 
     const customers = data.rows.map((customer) => ({
       ...customer,
@@ -271,4 +316,107 @@ export async function getUrlParams(params: ParamTypes) {
     currentPage,
     searchQuery,
   }
+}
+
+// Ensure all months are present
+const allMonths = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+]
+
+const formatRevenueData = (
+  revenue: QueryResult<QueryResultRow>,
+  suffix: string
+) => {
+  const currentYear = new Date().getFullYear()
+  const lastYear = currentYear - 1
+
+  const monthlyRevenueData = revenue.rows.reduce((acc, row) => {
+    const month = formatDateToMonth(row.month)
+    const year = row.year.getFullYear()
+
+    if (!acc[month]) {
+      acc[month] = {
+        date: month,
+        [`This year ${suffix}`]: 0,
+        [`Last year ${suffix}`]: 0,
+      }
+    }
+
+    if (year === currentYear) {
+      acc[month][`This year ${suffix}`] = Number(row.total) / 100
+    } else if (year === lastYear) {
+      acc[month][`Last year ${suffix}`] = Number(row.total) / 100
+    }
+
+    return acc
+  }, {})
+
+  allMonths.forEach((month) => {
+    if (!monthlyRevenueData[month]) {
+      monthlyRevenueData[month] = {
+        date: month,
+        [`This year ${suffix}`]: 0,
+        [`Last year ${suffix}`]: 0,
+      }
+    }
+  })
+
+  const monthlyRevenueArray = Object.values(monthlyRevenueData)
+  monthlyRevenueArray.sort(
+    (a, b) => allMonths.indexOf(a.date) - allMonths.indexOf(b.date)
+  )
+  return monthlyRevenueArray
+}
+
+export type RevenueData = {
+  date: string
+  'This year revenue': number
+  'Last year revenue': number
+  'This year debt': number
+  'Last year debt': number
+}[]
+
+export const fetchRevenueData = async (): Promise<RevenueData> => {
+  const monthlyRevenue = await sql`
+    SELECT
+      DATE_TRUNC('month', paid_at) AS month,
+      DATE_TRUNC('year', paid_at) AS year,
+      SUM(amount) AS total
+    FROM invoices
+    WHERE status = 'paid'
+    GROUP BY month, year
+    ORDER BY year, month
+  `
+
+  const overduePendingInvoices = await sql`
+    SELECT
+      DATE_TRUNC('month', due_at) AS month,
+      DATE_TRUNC('year', due_at) AS year,
+      SUM(amount) * -1 AS total
+    FROM invoices
+    WHERE status = 'pending' AND due_at < NOW()
+    GROUP BY month, year
+    ORDER BY year, month
+  `
+  const revenue = formatRevenueData(monthlyRevenue, 'revenue')
+  const overduePending = formatRevenueData(overduePendingInvoices, 'debt')
+  const mergedData = revenue.map((rev, i) => {
+    return {
+      ...rev,
+      ...overduePending[i],
+    }
+  })
+
+  return mergedData
 }
