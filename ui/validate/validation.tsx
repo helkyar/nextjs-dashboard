@@ -14,7 +14,7 @@ export function ValidationWithToast({
   }
   if (response.success) {
     toast.success(response.success)
-    redirect('/')
+    setTimeout(() => redirect('/'), 1000)
   }
   return (
     <div className='w-full h-full flex items-center justify-center'>
