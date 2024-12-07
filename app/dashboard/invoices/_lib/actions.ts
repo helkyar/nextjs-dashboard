@@ -10,12 +10,14 @@ export type State = {
     customerId?: string[]
     amount?: string[]
     status?: string[]
+    due?: string[]
   }
   message?: string | null
 }
 type ExtendedState = State & { success?: string; error?: string }
+const date = new Date().toISOString().split('T')[0]
 
-const CreateInvoice = InvoiceSchema.omit({ id: true, date: true })
+const CreateInvoice = InvoiceSchema.omit({ id: true, createdAt: true })
 export async function createInvoice(
   formData: FormData
 ): Promise<ExtendedState> {
@@ -26,14 +28,15 @@ export async function createInvoice(
   })
 
   if (validatedFields.error) return validatedFields.error
-  const { customerId, amount, status } = validatedFields.data
+  const { customerId, amount, status, due } = validatedFields.data
   const amountInCents = amount * 100
-  const date = new Date().toISOString().split('T')[0]
+
+  const paidAt = status === 'paid' ? date : null
 
   try {
     await sql`
-  INSERT INTO invoices (customer_id, amount, status, date)
-  VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
+  INSERT INTO invoices (customer_id, amount, status, created_at, due_at, paid_at)
+  VALUES (${customerId}, ${amountInCents}, ${status}, ${date}, ${due}, ${paidAt})
 `
     return { success: 'Invoice created successfully.' }
   } catch {
@@ -43,7 +46,7 @@ export async function createInvoice(
   }
 }
 
-const UpdateInvoice = InvoiceSchema.omit({ id: true, date: true })
+const UpdateInvoice = InvoiceSchema.omit({ id: true, createdAt: true })
 export async function updateInvoice(
   formData: FormData,
   id: string
@@ -55,16 +58,31 @@ export async function updateInvoice(
   })
 
   if (validatedFields.error) return validatedFields.error
-  const { customerId, amount, status } = validatedFields.data
+  const { customerId, amount, status, due } = validatedFields.data
   const amountInCents = amount * 100
   try {
-    await sql`
+    const data = await sql`
+    SELECT status FROM invoices WHERE id = ${id}`
+    if (data.rows[0].status === 'pending' && status === 'paid') {
+      await sql`
+        UPDATE invoices
+        SET customer_id = ${customerId}, 
+        amount = ${amountInCents}, 
+        status = ${status}
+        paid_at = ${date}
+        due_at = ${due}
+        WHERE id = ${id}
+      `
+    } else {
+      await sql`
       UPDATE invoices
       SET customer_id = ${customerId}, 
       amount = ${amountInCents}, 
       status = ${status}
+      due_at = ${due}
       WHERE id = ${id}
-    `
+      `
+    }
 
     return { success: 'Invoice updated successfully.' }
   } catch {

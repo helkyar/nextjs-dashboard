@@ -12,9 +12,6 @@ import { formatCurrency } from './utils'
 
 export async function fetchRevenue() {
   try {
-    // Artificially delay a response for demo purposes.
-    // await new Promise((resolve) => setTimeout(resolve, 3000))
-
     const data = await sql<Revenue>`SELECT * FROM revenue`
 
     return data.rows
@@ -30,7 +27,7 @@ export async function fetchLatestInvoices(limit: number = 5) {
       SELECT invoices.amount, customers.name, customers.image_url, customers.email, invoices.id
       FROM invoices
       JOIN customers ON invoices.customer_id = customers.id
-      ORDER BY invoices.date DESC
+      ORDER BY invoices.created_at DESC
       LIMIT ${limit}`
 
     const latestInvoices = data.rows.map((invoice) => ({
@@ -91,7 +88,7 @@ export async function fetchFilteredInvoices(
       SELECT
         invoices.id,
         invoices.amount,
-        invoices.date,
+        invoices.created_at,
         invoices.status,
         customers.name,
         customers.email,
@@ -102,9 +99,9 @@ export async function fetchFilteredInvoices(
         customers.name ILIKE ${`%${query}%`} OR
         customers.email ILIKE ${`%${query}%`} OR
         invoices.amount::text ILIKE ${`%${query}%`} OR
-        invoices.date::text ILIKE ${`%${query}%`} OR
+        invoices.created_at::text ILIKE ${`%${query}%`} OR
         invoices.status ILIKE ${`%${query}%`}
-      ORDER BY invoices.date DESC
+      ORDER BY invoices.created_at DESC
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
     `
 
@@ -124,7 +121,7 @@ export async function fetchInvoicesPages(query: string) {
       customers.name ILIKE ${`%${query}%`} OR
       customers.email ILIKE ${`%${query}%`} OR
       invoices.amount::text ILIKE ${`%${query}%`} OR
-      invoices.date::text ILIKE ${`%${query}%`} OR
+      invoices.created_at::text ILIKE ${`%${query}%`} OR
       invoices.status ILIKE ${`%${query}%`}
   `
 
@@ -144,6 +141,7 @@ export async function fetchInvoiceById(id: string) {
         invoices.customer_id,
         invoices.amount,
         invoices.status
+        invoices.due_at
       FROM invoices
       WHERE invoices.id = ${id};
     `

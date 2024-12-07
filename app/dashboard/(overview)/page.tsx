@@ -1,5 +1,4 @@
 import CardWrapper from '@/ui/dashboard/cards'
-import RevenueChart from '@/ui/dashboard/revenue-chart'
 import LatestInvoices from '@/ui/dashboard/latest-invoices'
 import { lusitana } from '@/ui/fonts'
 import { Suspense } from 'react'
@@ -8,6 +7,7 @@ import {
   LatestInvoicesSkeleton,
   RevenueChartSkeleton,
 } from '@/ui/skeletons'
+import { RevenueChart } from '@/ui/dashboard/chart'
 
 export default async function Page() {
   return (

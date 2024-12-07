@@ -7,7 +7,7 @@ const users = [
     email: 'user@nextmail.com',
     password: '123456',
   },
-];
+]
 
 const customers = [
   {
@@ -46,88 +46,114 @@ const customers = [
     email: 'balazs@orban.com',
     image_url: '/customers/balazs-orban.png',
   },
-];
+]
 
 const invoices = [
   {
     customer_id: customers[0].id,
     amount: 15795,
     status: 'pending',
-    date: '2022-12-06',
+    created_at: '2024-12-06',
+    due_at: '2024-12-30',
+    paid_at: null,
   },
   {
     customer_id: customers[1].id,
     amount: 20348,
     status: 'pending',
-    date: '2022-11-14',
+    created_at: '2024-11-14',
+    due_at: '2024-12-30',
+    paid_at: null,
   },
   {
     customer_id: customers[4].id,
     amount: 3040,
     status: 'paid',
-    date: '2022-10-29',
+    created_at: '2024-10-29',
+    due_at: '2024-12-30',
+    paid_at: '2024-10-31',
   },
   {
     customer_id: customers[3].id,
     amount: 44800,
     status: 'paid',
-    date: '2023-09-10',
+    created_at: '2024-09-10',
+    due_at: '2024-12-30',
+    paid_at: '2024-09-12',
   },
   {
     customer_id: customers[5].id,
     amount: 34577,
     status: 'pending',
-    date: '2023-08-05',
+    created_at: '2024-08-05',
+    due_at: '2024-12-30',
+    paid_at: null,
   },
   {
     customer_id: customers[2].id,
     amount: 54246,
     status: 'pending',
-    date: '2023-07-16',
+    created_at: '2024-07-16',
+    due_at: '2024-12-30',
+    paid_at: null,
   },
   {
     customer_id: customers[0].id,
     amount: 666,
     status: 'pending',
-    date: '2023-06-27',
+    created_at: '2024-06-27',
+    due_at: '2024-12-30',
+    paid_at: null,
   },
   {
     customer_id: customers[3].id,
     amount: 32545,
     status: 'paid',
-    date: '2023-06-09',
+    created_at: '2024-06-09',
+    due_at: '2024-12-30',
+    paid_at: '2024-06-11',
   },
   {
     customer_id: customers[4].id,
     amount: 1250,
     status: 'paid',
-    date: '2023-06-17',
+    created_at: '2024-06-17',
+    due_at: '2024-12-30',
+    paid_at: '2024-06-19',
   },
   {
     customer_id: customers[5].id,
     amount: 8546,
     status: 'paid',
-    date: '2023-06-07',
+    created_at: '2024-06-07',
+    due_at: '2024-12-30',
+    paid_at: '2024-06-09',
   },
   {
     customer_id: customers[1].id,
     amount: 500,
     status: 'paid',
-    date: '2023-08-19',
+    created_at: '2024-08-19',
+    due_at: '2024-12-30',
+    paid_at: '2024-08-21',
   },
   {
     customer_id: customers[5].id,
     amount: 8945,
     status: 'paid',
-    date: '2023-06-03',
+    created_at: '2024-06-03',
+    due_at: '2024-12-30',
+    paid_at: '2024-06-05',
   },
   {
     customer_id: customers[2].id,
     amount: 1000,
     status: 'paid',
-    date: '2022-06-05',
+    created_at: '2024-06-05',
+    due_at: '2024-12-30',
+    paid_at: '2024-06-07',
   },
-];
+]
 
 const revenue = [
   { month: 'Jan', revenue: 2000 },
@@ -142,6 +168,6 @@ const revenue = [
   { month: 'Oct', revenue: 2800 },
   { month: 'Nov', revenue: 3000 },
   { month: 'Dec', revenue: 4800 },
-];
+]
 
-export { users, customers, invoices, revenue };
+export { users, customers, invoices, revenue }

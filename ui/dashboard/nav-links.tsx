@@ -22,7 +22,7 @@ const links = [
   { name: 'Customers', href: '/dashboard/customers', icon: UserGroupIcon },
 ]
 
-export default function NavLinks() {
+export default function NavLinks({ isOpen }: { readonly isOpen: boolean }) {
   const pathname = usePathname()
 
   return (
@@ -41,7 +41,13 @@ export default function NavLinks() {
             )}
           >
             <LinkIcon className='w-6' />
-            <p className='hidden md:group-hover:block'>{link.name}</p>
+            <p
+              className={clsx('hidden', {
+                ['md:block']: isOpen,
+              })}
+            >
+              {link.name}
+            </p>
           </Link>
         )
       })}

@@ -45,7 +45,7 @@ export default async function InvoicesTable({
                     <p className='text-xl font-medium'>
                       {formatCurrency(invoice.amount)}
                     </p>
-                    <p>{formatDateToLocal(invoice.date)}</p>
+                    <p>{formatDateToLocal(invoice.created_at)}</p>
                   </div>
                   <div className='flex justify-end gap-2'>
                     <UpdateInvoice id={invoice.id} />
@@ -107,7 +107,7 @@ export default async function InvoicesTable({
                     {formatCurrency(invoice.amount)}
                   </td>
                   <td className='bg-white whitespace-nowrap px-3 py-3'>
-                    {formatDateToLocal(invoice.date)}
+                    {formatDateToLocal(invoice.created_at)}
                   </td>
                   <td className='bg-white whitespace-nowrap px-3 py-3'>
                     <InvoiceStatus status={invoice.status} />
