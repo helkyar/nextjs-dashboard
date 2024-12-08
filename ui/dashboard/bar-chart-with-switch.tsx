@@ -1,6 +1,8 @@
 'use client'
 import { RevenueData } from '@/lib/data'
-import { BarChart, Divider, Switch } from '@/ui/charts'
+import { cx } from '@/lib/utils'
+import { Button } from '@/ui/button'
+import { BarChart, Divider } from '@/ui/charts'
 import { useState, useMemo } from 'react'
 
 function valueFormatter(number: number) {
@@ -36,7 +38,6 @@ const filterByProperty = (
     if (!debt && i > 1) return false
     return true
   })
-  console.log('🚀 ~ ~ filteredCategories:', filteredCategories)
   return filteredCategories
 }
 
@@ -48,21 +49,17 @@ export function BarChartWithSwitch({ data }: PropTypes) {
     () => filterByProperty(categoriesCompared, showLastYear, showDebt),
     [showLastYear, showDebt]
   )
-  console.log('🚀 ~  ~ categories:', categories)
   const colors = useMemo(
     () => filterByProperty(colorsCompared, showLastYear, showDebt) as Colors,
     [showLastYear, showDebt]
   )
-  console.log('🚀 ~  ~ colors:', colors)
 
   return (
     <>
       <BarChart
-        key={categories.join('')}
         data={data}
         index='date'
         categories={categories}
-        // onValueChange={(value) => console.log(value)}
         colors={colors}
         valueFormatter={valueFormatter}
         yAxisWidth={50}
@@ -79,14 +76,23 @@ export function BarChartWithSwitch({ data }: PropTypes) {
       />
       <Divider />
       <div className='mb-2 flex gap-3 justify-center'>
-        <div className='space-x-1 flex items-center'>
+        <Button
+          className={cx('bg-blue-500', { 'bg-accent': showLastYear })}
+          onClick={() => setShowLastYear((ly) => !ly)}
+        >
+          Toggle last year
+        </Button>
+        <Button
+          className={cx('bg-blue-500', { 'bg-accent': showDebt })}
+          onClick={() => setShowDebt((d) => !d)}
+        >
+          Toggle debt chart
+        </Button>
+        {/* <div className='space-x-1 flex items-center'>
           <Switch
             id='comparison'
             checked={showLastYear}
-            onClick={() => {
-              console.log('🚀 ~ ~ showLastYear:', showLastYear)
-              setShowLastYear((ly) => !ly)
-            }}
+            onClick={() => setShowLastYear((ly) => !ly)}
           />
           <label
             htmlFor='comparison'
@@ -99,10 +105,7 @@ export function BarChartWithSwitch({ data }: PropTypes) {
           <Switch
             id='debt'
             checked={showDebt}
-            onClick={() => {
-              console.log('🚀 ~ ~ showDebt:', showDebt)
-              setShowDebt((d) => !d)
-            }}
+            onClick={() => setShowDebt((d) => !d)}
           />
           <label
             htmlFor='debt'
@@ -110,7 +113,7 @@ export function BarChartWithSwitch({ data }: PropTypes) {
           >
             Show debt
           </label>
-        </div>
+        </div> */}
       </div>
     </>
   )
