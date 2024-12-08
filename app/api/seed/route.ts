@@ -1,17 +1,14 @@
 import bcrypt from 'bcrypt'
 import { db } from '@/lib/db-connection'
-import { invoices, customers, revenue, users } from './placeholder-data'
+import { invoices, customers, users } from './placeholder-data'
 import fs from 'fs/promises'
-import amy from './customers/amy-burns.png'
-import balazs from './customers/balazs-orban.png'
-import delba from './customers/delba-de-oliveira.png'
-import evil from './customers/evil-rabbit.png'
-import lee from './customers/lee-robinson.png'
-import michael from './customers/michael-novotny.png'
 import { auth } from '@/auth/auth'
-const images = [evil, delba, lee, michael, amy, balazs]
 
 const client = await db.connect()
+
+async function dropDatabase() {
+  await client.sql`DROP TABLE IF EXISTS users, invoices, customers, revenue;`
+}
 
 async function seedUsers() {
   await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`
@@ -94,26 +91,26 @@ async function seedCustomers() {
   return insertedCustomers
 }
 
-async function seedRevenue() {
-  await client.sql`
-    CREATE TABLE IF NOT EXISTS revenue (
-      month VARCHAR(4) NOT NULL UNIQUE,
-      revenue INT NOT NULL
-    );
-  `
+// async function seedRevenue() {
+//   await client.sql`
+//     CREATE TABLE IF NOT EXISTS revenue (
+//       month VARCHAR(4) NOT NULL UNIQUE,
+//       revenue INT NOT NULL
+//     );
+//   `
 
-  const insertedRevenue = await Promise.all(
-    revenue.map(
-      (rev) => client.sql`
-        INSERT INTO revenue (month, revenue)
-        VALUES (${rev.month}, ${rev.revenue})
-        ON CONFLICT (month) DO NOTHING;
-      `
-    )
-  )
+//   const insertedRevenue = await Promise.all(
+//     revenue.map(
+//       (rev) => client.sql`
+//         INSERT INTO revenue (month, revenue)
+//         VALUES (${rev.month}, ${rev.revenue})
+//         ON CONFLICT (month) DO NOTHING;
+//       `
+//     )
+//   )
 
-  return insertedRevenue
-}
+//   return insertedRevenue
+// }
 
 export async function GET() {
   const user = await auth()
@@ -124,33 +121,36 @@ export async function GET() {
         'Nice try, precautions have been taken to avoid this naughty behavior 🎅',
     })
   }
-  // Drop all tables
-  // check if user images exist in public/customers
-  // create them if not
+
   try {
-    const customerDir = 'public/customers'
-    const files = await fs.readdir(customerDir)
-    await Promise.all(files.map((file) => fs.unlink(`${customerDir}/${file}`)))
+    const publicCustomersPath = './public/customers'
 
-    customers.forEach(async (customer, i) => {
-      const path = `public/customers/${customer.image_url}`
-      try {
-        const imageBuffer = await fs.readFile(images[i].src)
-        await fs.writeFile(path, new Uint8Array(imageBuffer))
-      } catch (err) {
-        console.error(`Error writing file ${path}:`, err)
-      }
-    })
+    // Delete all images from /public/customers folder
+    const files = await fs.readdir(publicCustomersPath)
+    await Promise.all(
+      files.map((file) => fs.unlink(`${publicCustomersPath}/${file}`))
+    )
 
-    await client.sql`
-      DROP TABLE IF EXISTS users, invoices, customers, revenue;
-    `
+    // Copy all images from /app/api/seed/customers to /public/customers
+    await Promise.all(
+      customers.map((customer) => {
+        const imageName = customer.image_url.split('/').pop()
+        return fs.copyFile(
+          `./app/api/seed/customers/${imageName}`,
+          `${publicCustomersPath}/${imageName}`
+        )
+      })
+    )
+  } catch (error) {
+    return Response.json({ error }, { status: 500 })
+  }
 
+  try {
     await client.sql`BEGIN`
+    await dropDatabase()
     await seedUsers()
     await seedCustomers()
     await seedInvoices()
-    await seedRevenue()
     await client.sql`COMMIT`
 
     return Response.json({ message: 'Database seeded successfully' })
