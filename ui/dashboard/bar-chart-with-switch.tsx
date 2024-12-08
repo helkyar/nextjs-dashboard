@@ -58,6 +58,7 @@ export function BarChartWithSwitch({ data }: PropTypes) {
   return (
     <>
       <BarChart
+        key={categories.join('')}
         data={data}
         index='date'
         categories={categories}
@@ -81,6 +82,7 @@ export function BarChartWithSwitch({ data }: PropTypes) {
         <div className='space-x-1 flex items-center'>
           <Switch
             id='comparison'
+            checked={showLastYear}
             onClick={() => {
               console.log('🚀 ~ ~ showLastYear:', showLastYear)
               setShowLastYear((ly) => !ly)
@@ -96,6 +98,7 @@ export function BarChartWithSwitch({ data }: PropTypes) {
         <div className='space-x-1 flex items-center'>
           <Switch
             id='debt'
+            checked={showDebt}
             onClick={() => {
               console.log('🚀 ~ ~ showDebt:', showDebt)
               setShowDebt((d) => !d)
