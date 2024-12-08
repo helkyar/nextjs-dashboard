@@ -30,7 +30,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         if (parsedCredentials.success) {
           const { email, password } = parsedCredentials.data
           const user = await getUser(email)
-          if (!user || !user.verified) return null
+          if (!user?.verified) return null
 
           const passwordsMatch = await bcrypt.compare(password, user.password)
           if (passwordsMatch) return user
@@ -46,63 +46,3 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
   },
 })
-
-// // API use case
-// export const { signIn, signOut, auth } = NextAuth({
-//   providers: [
-//     Credentials({
-//       credentials: {
-//         username: { label: "Username" },
-//         password: { label: "Password", type: "password" },
-//       },
-//       async authorize({ request }) {
-//         const response = await fetch(request)
-//         if (!response.ok) return null
-//         return (await response.json()) ?? null
-//       },
-//     }),
-//   ],
-// })
-
-// // Provider config
-// import NextAuth, { AuthOptions, DefaultUser } from "next-auth"
-// import SpotifyProvider from "next-auth/providers/spotify"
-
-// export const authOptions: AuthOptions = {
-//   // Configure one or more authentication providers
-//   providers: [
-//     SpotifyProvider({
-//       clientId: process.env.SPOTIFY_CLIENT_ID!,
-//       clientSecret: process.env.SPOTIFY_CLIENT_SECRET!,
-//       authorization: {
-//         params: {
-//           scope: process.env.SPOTIFY_API_SCOPE!
-//         }
-//       }
-//     }),
-//   ],
-//   callbacks: {
-//     async jwt({token, account}) {
-//       if (account) {
-//         token.id = account.providerAccountId
-//         token.accessToken = account.access_token
-//       }
-//       return token
-//     },
-//     async session({session, token}) {
-//       // console.log('token', token);
-//       session.user.userId = token.id;
-//       session.user.accessToken = token.accessToken;
-//       return session
-//     },
-//     async redirect({url, baseUrl}) {
-//       console.log('url', url);
-//       console.log('baseUrl', baseUrl);
-
-//       return url.startsWith(baseUrl) ? url : baseUrl + '/protected/client';
-//     }
-//   }
-// }
-
-// const handler = NextAuth(authOptions);
-// export { handler as GET, handler as POST };
