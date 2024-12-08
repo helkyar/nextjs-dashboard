@@ -6,8 +6,8 @@ import { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | Acme Dashboard',
-    default: 'Acme Dashboard',
+    template: '%s | Invoice Master',
+    default: 'Invoice Master',
   },
   description: '',
   metadataBase: new URL('https://nextjs-dashboard-helkyar.vercel.app/'),

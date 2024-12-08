@@ -61,16 +61,7 @@ export function BarChartWithSwitch({ data }: PropTypes) {
         colors={colors}
         valueFormatter={valueFormatter}
         yAxisWidth={50}
-        className='mt-6 hidden grow-0 sm:block'
-      />
-      <BarChart
-        data={data}
-        index='date'
-        categories={categories}
-        colors={colors}
-        valueFormatter={valueFormatter}
-        showYAxis={false}
-        className='mt-4 h-56 sm:hidden'
+        className='mt-4 h-80'
       />
       <Divider />
       <div className='mb-2 flex gap-3 justify-center'>
