@@ -31,11 +31,13 @@ const filterByProperty = (
   lastYear: boolean,
   debt: boolean
 ) => {
-  return categories.filter((_, i) => {
+  const filteredCategories = categories.filter((_, i) => {
     if (!lastYear && (i === 1 || i === 3)) return false
     if (!debt && i > 1) return false
     return true
   })
+  console.log('🚀 ~ ~ filteredCategories:', filteredCategories)
+  return filteredCategories
 }
 
 export function BarChartWithSwitch({ data }: PropTypes) {
@@ -46,10 +48,12 @@ export function BarChartWithSwitch({ data }: PropTypes) {
     () => filterByProperty(categoriesCompared, showLastYear, showDebt),
     [showLastYear, showDebt]
   )
+  console.log('🚀 ~  ~ categories:', categories)
   const colors = useMemo(
     () => filterByProperty(colorsCompared, showLastYear, showDebt) as Colors,
     [showLastYear, showDebt]
   )
+  console.log('🚀 ~  ~ colors:', colors)
 
   return (
     <>
@@ -77,7 +81,10 @@ export function BarChartWithSwitch({ data }: PropTypes) {
         <div className='space-x-1 flex items-center'>
           <Switch
             id='comparison'
-            onClick={() => setShowLastYear((ly) => !ly)}
+            onClick={() => {
+              console.log('🚀 ~ ~ showLastYear:', showLastYear)
+              setShowLastYear((ly) => !ly)
+            }}
           />
           <label
             htmlFor='comparison'
@@ -87,7 +94,13 @@ export function BarChartWithSwitch({ data }: PropTypes) {
           </label>
         </div>
         <div className='space-x-1 flex items-center'>
-          <Switch id='debt' onClick={() => setShowDebt((d) => !d)} />
+          <Switch
+            id='debt'
+            onClick={() => {
+              console.log('🚀 ~ ~ showDebt:', showDebt)
+              setShowDebt((d) => !d)
+            }}
+          />
           <label
             htmlFor='debt'
             className='text-tremor-default text-tremor-content dark:text-dark-tremor-content'
