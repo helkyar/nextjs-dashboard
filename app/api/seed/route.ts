@@ -135,7 +135,7 @@ export async function GET() {
     customers.forEach(async (customer, i) => {
       const path = `public/customers/${customer.image_url}`
       try {
-        const imageBuffer = Buffer.from(images[i].src.split(',')[1], 'base64')
+        const imageBuffer = await fs.readFile(images[i].src)
         await fs.writeFile(path, new Uint8Array(imageBuffer))
       } catch (err) {
         console.error(`Error writing file ${path}:`, err)
