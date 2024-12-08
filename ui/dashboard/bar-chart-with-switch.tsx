@@ -1,8 +1,6 @@
 'use client'
 import { RevenueData } from '@/lib/data'
-import { cx } from '@/lib/utils'
-import { Button } from '@/ui/button'
-import { BarChart, Divider } from '@/ui/charts'
+import { BarChart, Divider, Switch } from '@/ui/charts'
 import { useState, useMemo } from 'react'
 
 function valueFormatter(number: number) {
@@ -76,44 +74,14 @@ export function BarChartWithSwitch({ data }: PropTypes) {
       />
       <Divider />
       <div className='mb-2 flex gap-3 justify-center'>
-        <Button
-          className={cx('bg-blue-500', { 'bg-accent': showLastYear })}
-          onClick={() => setShowLastYear((ly) => !ly)}
-        >
-          Toggle last year
-        </Button>
-        <Button
-          className={cx('bg-blue-500', { 'bg-accent': showDebt })}
-          onClick={() => setShowDebt((d) => !d)}
-        >
-          Toggle debt chart
-        </Button>
-        {/* <div className='space-x-1 flex items-center'>
-          <Switch
-            id='comparison'
-            checked={showLastYear}
-            onClick={() => setShowLastYear((ly) => !ly)}
-          />
-          <label
-            htmlFor='comparison'
-            className='text-tremor-default text-tremor-content dark:text-dark-tremor-content'
-          >
-            Show last year
-          </label>
-        </div>
-        <div className='space-x-1 flex items-center'>
-          <Switch
-            id='debt'
-            checked={showDebt}
-            onClick={() => setShowDebt((d) => !d)}
-          />
-          <label
-            htmlFor='debt'
-            className='text-tremor-default text-tremor-content dark:text-dark-tremor-content'
-          >
-            Show debt
-          </label>
-        </div> */}
+        <Switch
+          onChange={() => setShowLastYear((ly) => !ly)}
+          label=' Toggle last year'
+        />
+        <Switch
+          onChange={() => setShowDebt((d) => !d)}
+          label='Toggle debt chart'
+        />
       </div>
     </>
   )

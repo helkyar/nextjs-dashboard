@@ -1,90 +1,26 @@
-// Tremor Switch [v0.0.1]
+type PropTypes = {
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  label: string
+}
 
-import React from 'react'
-import * as SwitchPrimitives from '@radix-ui/react-switch'
-import { tv, VariantProps } from 'tailwind-variants'
-
-import { cx, focusRing } from '@/lib/utils'
-
-const switchVariants = tv({
-  slots: {
-    root: [
-      // base
-      'group relative isolate inline-flex shrink-0 cursor-pointer items-center rounded-full p-0.5 shadow-inner outline-none ring-1 ring-inset transition-all',
-      'bg-gray-200',
-      // ring color
-      'ring-black/5',
-      // checked
-      'data-[state=checked]:bg-blue-500',
-      // disabled
-      'data-[disabled]:cursor-default',
-      // disabled checked
-      'data-[disabled]:data-[state=checked]:bg-blue-200',
-      'data-[disabled]:data-[state=checked]:ring-gray-300',
-      // disabled checked dark
-      // 'data-[disabled]:data-[state=checked]:dark:ring-gray-900',
-      // 'data-[disabled]:data-[state=checked]:dark:bg-blue-900',
-      // disabled unchecked
-      'data-[disabled]:data-[state=unchecked]:ring-gray-300',
-      'data-[disabled]:data-[state=unchecked]:bg-gray-100',
-      // disabled unchecked dark
-      // 'data-[disabled]:data-[state=unchecked]:dark:ring-gray-700',
-      // 'data-[disabled]:data-[state=unchecked]:dark:bg-gray-800',
-      focusRing,
-    ],
-    thumb: [
-      // base
-      'pointer-events-none relative inline-block transform appearance-none rounded-full border-none shadow-lg outline-none transition-all duration-150 ease-in-out focus:border-none focus:outline-none focus:outline-transparent',
-      // background color
-      'bg-white',
-      // disabled
-      'group-data-[disabled]:shadow-none',
-      // 'group-data-[disabled]:bg-gray-50 group-data-[disabled]:dark:bg-gray-500',
-    ],
-  },
-  variants: {
-    size: {
-      default: {
-        root: 'h-5 w-9',
-        thumb:
-          'h-4 w-4 data-[state=checked]:translate-x-4 data-[state=unchecked]:translate-x-0',
-      },
-      small: {
-        root: 'h-4 w-7',
-        thumb:
-          'h-3 w-3 data-[state=checked]:translate-x-3 data-[state=unchecked]:translate-x-0',
-      },
-    },
-  },
-  defaultVariants: {
-    size: 'default',
-  },
-})
-
-interface SwitchProps
-  extends Omit<
-      React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root>,
-      'asChild'
-    >,
-    VariantProps<typeof switchVariants> {}
-
-const Switch = React.forwardRef<
-  React.ElementRef<typeof SwitchPrimitives.Root>,
-  SwitchProps
->(({ className, size, ...props }: SwitchProps, forwardedRef) => {
-  const { root, thumb } = switchVariants({ size })
+export function Switch({ onChange, label }: PropTypes) {
   return (
-    <SwitchPrimitives.Root
-      ref={forwardedRef}
-      className={cx(root(), className)}
-      tremor-id='tremor-raw'
-      {...props}
-    >
-      <SwitchPrimitives.Thumb className={cx(thumb())} />
-    </SwitchPrimitives.Root>
+    <div className='flex gap-1 items-center relative'>
+      <input
+        className='peer sr-only'
+        id={`switch-${label}`}
+        type='checkbox'
+        onChange={onChange}
+      />
+      <label
+        className='relative w-[40px] h-[24px] bg-gray-200 peer-checked:bg-accent rounded-[34px] cursor-pointer [transition:background-color_0.3s] before:content-[""] before:absolute before:w-[20px] before:h-[20px] before:rounded-[50%] before:top-[2px] before:left-[2px] before:bg-[#fff] before:[box-shadow:0px_2px_5px_0px_rgba(0,_0,_0,_0.3)] before:[transition:transform_0.3s] peer-checked:before:translate-x-[16px]'
+        htmlFor={`switch-${label}`}
+      >
+        <span className='absolute text-sm text-gray-600 left-[115%] top-[50%] translate-y-[-50%] text-nowrap'>
+          {label}
+        </span>
+      </label>
+      <span style={{ minWidth: label.length * 7 }} className='opacity-0 z-0' />
+    </div>
   )
-})
-
-Switch.displayName = 'Switch'
-
-export { Switch }
+}
